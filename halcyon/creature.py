@@ -37,7 +37,7 @@ class Crew_Member(Laborer):
 
     def __init__(self, name, on_planet, in_octant):
         super().__init__(name, on_planet, in_octant, harvest_rate=1/12)
-        self.tags['Material'].append('Organic')
+        self.tags['Material'].append('Flesh')
 
 class Engineer(Crew_Member):
 
@@ -46,6 +46,8 @@ class Engineer(Crew_Member):
 
     def make_building_plan(self):
         return self.octant
+
+
 
 class Automaton(Laborer):
 
