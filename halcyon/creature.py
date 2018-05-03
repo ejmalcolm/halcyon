@@ -35,10 +35,17 @@ class Laborer(Creature):
 
 class Crew_Member(Laborer):
 
-    def __init__(self, name, on_planet, in_octant, role):
+    def __init__(self, name, on_planet, in_octant):
         super().__init__(name, on_planet, in_octant, harvest_rate=1/12)
-        self.role = role
         self.tags['Material'].append('Organic')
+
+class Engineer(Crew_Member):
+
+    def __init__(self, name, on_planet, in_octant):
+        super().__init__(name, on_planet, in_octant)
+
+    def make_building_plan(self):
+        return self.octant
 
 class Automaton(Laborer):
 
