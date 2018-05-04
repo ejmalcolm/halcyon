@@ -1,9 +1,14 @@
+import tkinter as tk
 from planet import Planet
-from building import Building_Plan
 
 hoth = Planet('Hoth', 10, 10)
-house_plan = Building_Plan('House', hoth, hoth.octants['North'], ['Wood', 'Enclosed'])
 
-print(house_plan.work_needed)
-house_plan.work_on(1)
-house_plan.work_on(1)
+root = tk.Tk()
+
+root.geometry('300x300')
+w = tk.Label(root, text=hoth)
+z = tk.Label(root, text='at %d, %d' % (hoth.x_pos, hoth.y_pos))
+w.pack()
+z.pack()
+
+root.mainloop()
