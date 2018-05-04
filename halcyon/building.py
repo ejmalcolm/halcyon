@@ -1,4 +1,3 @@
-from planet import Planet
 from tags import add_tags, get_stat
 
 class Building_Plan():
@@ -14,13 +13,16 @@ class Building_Plan():
         self.tags = {'Material' : [], 'Structure' : [], 'Function' : []}
         #send the tag argument to the add_tags function
         add_tags(self, tags)
-        #initalize the amount of UoW needed to complete
-        #self.work_needed =
+        #initalize the amount of Work needed to complete
+        self.work_needed = get_stat(self, 'Work')
+
+    def work_on(self, amount):
+        self.work_needed -= amount
+        if self.work_needed == 0:
+            plan_finished(self)
+            print('Building %s on %s, %s, was finished.' %(self.name, self.planet, self.octant))
+        else:
+            print('%d units of Work left until completion for %s' % (self.work_needed, self.name))
 
     def __str__(self):
         return 'a building plan for a %s' % self.name
-
-Arrakis = Planet('Arrakis', 5, 5)
-House = Building_Plan('House', Arrakis, Arrakis.octants['North'], ['Wood', 'Enclosed', 'Factory: Wood Crafts'])
-
-print(get_stat(House, 'Work'))
