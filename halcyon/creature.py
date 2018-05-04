@@ -1,3 +1,8 @@
+from building import Building_Plan
+from tags import add_tags
+from task import Task
+from player import gain_resource
+
 class Creature():
 
     def __init__(self, name, on_planet, in_octant, health=5, move=0, player=0):
@@ -25,7 +30,13 @@ class Laborer(Creature):
         return 'a Laborer named %s' % self.name
 
     def harvest_resource(self, resource):
+        '''starts a Task() of harvesting the given resource if the resource is in the same octant'''
+        #check if the resource is in the same octant
         if resource in self.octant.resources:
+            #calculate the number of hours needed to finish the Task
+            hours = (1/self.harvest_rate)
+            #start the Task object with the given number of hours and the end result of calling gain_resource
+            harvest_task = Task(self, hours, gain_resource(player))
             return '%s is now harvesting %s' % (self.name, resource)
         return 'there is no %s in %s' % (resource, self.octant)
 
@@ -33,12 +44,14 @@ class Laborer(Creature):
         if building_plan in self.octant.contents:
             print('%s is now building %s' % (self.name, building_plan))
         print('there is no unfinished %s in %s' % (building_plan, self.octant))
+        
 
 class Crew_Member(Laborer):
 
     def __init__(self, name, on_planet, in_octant):
         super().__init__(name, on_planet, in_octant, harvest_rate=1/12)
-        self.tags['Material'].append('Flesh')
+        #add the Flesh material to the material tags 
+        add_tags(self, 'Flesh')
 
 class Engineer(Crew_Member):
 
