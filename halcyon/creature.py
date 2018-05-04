@@ -8,6 +8,7 @@ class Creature():
         self.player = player
         self.planet = on_planet
         self.octant = in_octant
+        #Add the creature to the contents of the octant
         self.octant.add_occupant(self)
 
     def __str__(self):
