@@ -19,10 +19,10 @@ class Building_Plan():
     def work_on(self, amount):
         self.work_needed -= amount
         if self.work_needed == 0:
-            plan_finished(self)
-            print('Building %s on %s, %s, was finished.' %(self.name, self.planet, self.octant))
+            #plan_finished(self)
+            print('A %s on %s, in %s, was finished.' %(self.name, self.planet, self.octant))
         else:
-            print('%d units of Work left until completion for %s' % (self.work_needed, self.name))
+            print('%d units of Work left until %s is completed' % (self.work_needed, self.name))
 
     def __str__(self):
         return 'a building plan for a %s' % self.name
