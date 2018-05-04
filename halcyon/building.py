@@ -12,16 +12,14 @@ class Building_Plan():
         self.octant.add_occupant(self)
         #initialize the default, blank values for each tag category
         self.tags = {'Material' : [], 'Structure' : [], 'Function' : []}
-        self.material = []
-        self.structure = []
-        self.function = []
         #send the tag argument to the add_tags function
         add_tags(self, tags)
+        #initalize
 
     def __str__(self):
         return 'a building plan for a %s' % self.name
 
 Arrakis = Planet('Arrakis', 5, 5)
-House = Building_Plan('House', Arrakis, Arrakis.octants['North'], ['Wood', 'Enclosed'])
+House = Building_Plan('House', Arrakis, Arrakis.octants['North'], ['Wood', 'Enclosed', 'Factory: Wood Crafts'])
 
-print(House.material)
+print(House.tags['Function'])
