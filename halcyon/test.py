@@ -1,14 +1,13 @@
-import tkinter as tk
-from planet import Planet
+class ABC():
 
-hoth = Planet('Hoth', 10, 10)
+    def __init__(self):
+        self.n = 1
 
-root = tk.Tk()
+class EFF(ABC):
 
-root.geometry('300x300')
-w = tk.Label(root, text=hoth)
-z = tk.Label(root, text='at %d, %d' % (hoth.x_pos, hoth.y_pos))
-w.pack()
-z.pack()
+    def __init__(self):
+        super().__init__()
 
-root.mainloop()
+me = EFF()
+
+print(me.n)
