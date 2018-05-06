@@ -9,7 +9,6 @@ from collections import Counter
 # Non-Standard Resources are very unique
 # The resources within a biome are influenced by the biome type
 
-
 def unique_chance():
     #figure out how to make this about 1 in 8
     randint = random.randint(1, 8)
