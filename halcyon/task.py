@@ -17,7 +17,7 @@ class Task():
             print('The task was finished.')
             self.end_func()
             return True
-        #otherwise, report the hours left
+        #otherwise, report the hours/minutes left until its done
         seconds_left = self.end_time - time()
         if seconds_left >= 3600:
             hours_left = int((seconds_left/3600))
@@ -28,11 +28,12 @@ class Task():
             print('there are %s minutes left' % minutes_left)
         return False
 
-#this is the loop to check and update a task every 5 minutes
-while True:
-    try:
-        #replace task with the reference of the Task() to check
-        task.check_progress()
-        sleep(300)
-    except KeyboardInterrupt:
-        raise
+##this is the function to start a loop to check and update a task every 5 minutes
+def task_loop(task):
+    while True:
+        try:
+            #replace task with the reference of the Task() to check
+            task.check_progress()
+            sleep(300)
+        except KeyboardInterrupt:
+            raise
