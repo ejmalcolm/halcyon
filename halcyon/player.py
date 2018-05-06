@@ -15,9 +15,3 @@ class Player():
     def gain_resource(self, resource, amount=1):
         for _ in range(amount):
             self.resources.append(resource)
-
-indi = Player('indi', 0)
-
-print(indi.resources)
-indi.gain_resource('wood', 1)
-print(indi.resources)

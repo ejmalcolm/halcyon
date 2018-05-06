@@ -35,17 +35,22 @@ class Laborer(Creature):
         if resource in self.octant.resources:
             #calculate the number of hours needed to finish the Task
             hours = (1/self.harvest_rate)
-            #start the Task object with the given number of hours
-            #at the end of the hours, will call gain_resource(on self)
+            #start the Task()
             harvest_task = Task(self, hours, self.player.gain_resource(resource))
+            #report what's been done
             return '%s is now harvesting %s' % (self.name, resource)
         return 'there is no %s in %s' % (resource, self.octant)
 
     def construct_building(self, building_plan):
+        '''starts a task of building the given plan if the plan is in the same octant'''
         if building_plan in self.octant.contents:
-            print('%s is now building %s' % (self.name, building_plan))
-        print('there is no unfinished %s in %s' % (building_plan, self.octant))
-
+            #hours needed to finish the task
+            hours = (1/self.build_rate)
+            #start the Task()
+            build_task = Task(self, hours, building_plan.plan_finished())
+            #report what's been done
+            return '%s is now building %s' % (self.name, building_plan)
+        return 'there is no unfinished %s in %s' % (building_plan, self.octant)
 
 class CrewMember(Laborer):
 
