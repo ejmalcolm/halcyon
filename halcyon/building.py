@@ -26,3 +26,5 @@ class Building_Plan():
             print('A %s on %s, in %s, was finished.' %(self.name, self.planet, self.octant))
         else:
             print('%d units of Work left until %s is completed' % (self.work_needed, self.name))
+
+#indi refactor your code to use a base object() class that has the name and player and planet and tag and octant stuff
