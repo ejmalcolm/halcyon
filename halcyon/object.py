@@ -2,7 +2,7 @@ from tags import add_tags
 
 class Object():
 
-        def __init__(self, name, on_planet, in_octant, tags=[], player=0):
+        def __init__(self, name, on_planet, in_octant, player=0):
             self.name = name
             self.player = player
             self.planet = on_planet
@@ -11,5 +11,3 @@ class Object():
             self.octant.add_occupant(self)
             #initialize the default, blank values for each tag category
             self.tags = {'Material' : [], 'Structure' : [], 'Function' : []}
-            #send the tag argument to the add_tags function
-            add_tags(self, tags)

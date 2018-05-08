@@ -1,5 +1,7 @@
 import planet
 import building
+import vehicle
+import creature
 from tags import get_attributes, get_all_tags
 
 Dune = planet.Planet('Arrakis', 5, 5)
@@ -9,15 +11,6 @@ Dune = planet.Planet('Arrakis', 5, 5)
 #a = building.Building('Forge', Dune, Dune.octants['North'], ['Wood', 'Factory: Wood Crafts'])
 #print(a.define_functions())
 
-list = []
+a = vehicle.SpaceShip('Halcyon', Dune, Dune.octants['North'], 100000)
 
-class ex():
-
-    def __init__(self):
-        list.append(self)
-
-def create_class(class_name):
-    return class_name()
-
-example = create_class(ex)
-print(list)
+b = creature.Creature('a', Dune, Dune.octants['North'], 0, 1)

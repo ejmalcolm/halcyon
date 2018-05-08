@@ -1,16 +1,6 @@
-MATERIAL_TAGS = {
-    'Wood' : {'Attributes' : ['Flammable', 'Organic'], 'Statistics' : {'Health' : 10, 'Work' : 1}}
-                }
+import cpickle
 
-STRUCTURE_TAGS = {
-    'Enclosed' : {'Attributes' : ['Enclosed'], 'Statistics' : {'Health' : 3, 'Work' : 1}}
-}
-
-FUNCTION_TAGS = {
-    'Factory: Wood Crafts' : {'Attributes' : ['Fabricate|Wood Craft'], 'Statistics' : {'Work' : 3}}
-}
-
-def add_tags(self, tags):
+def add_tags(self, tags_list):
     for tag in tags:
         if tag in MATERIAL_TAGS:
             self.tags['Material'].append(tag)
