@@ -1,5 +1,5 @@
 from object import Object
-from tags import add_tags, get_stat, get_all_tags, get_attributes
+from tags import add_tags, get_stat, get_all_tags, get_functions
 
 class Building_Plan(Object):
 
@@ -28,15 +28,30 @@ class Building_Plan(Object):
         created_building = Building(self.name, self.planet, self.octant, get_all_tags(self), self.player)
         return created_building
 
+UNIQUE_FUNCTIONS = {}
 
 class Building(Object):
 
     def __init__(self, name, on_planet, in_octant, tags, player=0):
         super().__init__(name, on_planet, in_octant, tags, player)
 
-    def get_functions(self):
-        attributes = get_attributes(self)
-        for attribute in attributes:
-            if '|' in attribute:
-                a = attribute.split('|')[1]
-                print(a)
+    def define_functions(self):
+        functions = get_functions(self)
+        #gets all functions in a list
+        #in the form Category|Specific function
+        #ex. 'Fabricate|Wood Craft'
+        for func in functions:
+            category = func.split('|')[0]
+            specific = func.split('|')[1]
+
+    def use_function(self, category, specific):
+        if category == Spawn:
+            return specific()
+        elif category == Fabricate:
+            pass
+        elif category == Refine:
+            pass
+        elif category == Produce:
+            pass
+        elif category == Unique:
+            pass

@@ -58,6 +58,14 @@ def get_attributes(self):
         attributes += tag_attributes
     return attributes
 
+def get_functions(self):
+    attributes = get_attributes(self)
+    return_list = []
+    for attribute in attributes:
+        if '|' in attribute:
+                return_list.append(attribute)
+    return return_list
+
 def get_all_tags(self):
     tags = []
     for tag in self.tags['Material'], self.tags['Structure'], self.tags['Function']:
