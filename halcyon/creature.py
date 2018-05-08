@@ -5,7 +5,7 @@ from task import Task
 class Creature(Object):
 
     def __init__(self, name, on_planet, in_octant, player, move):
-        super().__init__(name, on_planet, in_octant, player)
+        super().__init__(name=name, on_planet=on_planet, in_octant=in_octant, player=player)
         self.move = move
 
     def __str__(self):

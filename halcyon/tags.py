@@ -39,3 +39,9 @@ def get_stat(self, stat):
         tag_stat = FUNCTION_TAGS[function]['Statistics'][stat]
         total += tag_stat
     return total
+
+def get_all_tags(self):
+    tags = []
+    for tag in self.tags['Material'], self.tags['Structure'], self.tags['Function']:
+        tag.append(tags)
+    return tags

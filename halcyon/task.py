@@ -2,7 +2,7 @@ from time import time, sleep
 
 ACTIVE_TASKS = []
 
-#the loop that checks all tasks every 5 minutes
+#the loop that checks all tasks every x amount of time
 def task_loop():
     while True:
         try:

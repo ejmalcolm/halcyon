@@ -1,6 +1,11 @@
-import creature
-from planet import Planet
+import planet
+import building
 
-Dune = Planet('Arrakis', 5, 5)
+Dune = planet.Planet('Arrakis', 5, 5)
 
-Jon = creature.Automaton('Jon', on_planet=Dune, in_octant=Dune.octants['North'])
+x = building.Building_Plan('Forge', Dune, Dune.octants['North'], ['Wood'])
+
+x.plan_finished()
+
+a = Dune.octants['North'].contents
+print(a)

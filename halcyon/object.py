@@ -2,7 +2,7 @@ from tags import add_tags
 
 class Object():
 
-        def __init__(self, name, on_planet, in_octant, player, tags=[]):
+        def __init__(self, name, on_planet, in_octant, tags=[], player=0):
             self.name = name
             self.player = player
             self.planet = on_planet
