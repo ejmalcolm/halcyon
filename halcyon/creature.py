@@ -1,28 +1,20 @@
+from object import Object
 from tags import add_tags
 from task import Task
 
-class Creature():
-    '''Base class for all creatures.
-    Contains statistics, tag information, and position.
-    Also handles adding the creature to the occupants of its octant.'''
-    def __init__(self, name, on_planet, in_octant, health=5, move=0, player=0):
-        self.tags = {'Material' : [], 'Structure' : [], 'Function' : []}
-        self.name = name
-        self.health = health
+class Creature(Object):
+
+    def __init__(self, name, on_planet, in_octant, player, move):
+        super().__init__(name, on_planet, in_octant, player)
         self.move = move
-        self.player = player
-        self.planet = on_planet
-        self.octant = in_octant
-        #Add the creature to the contents of the octant
-        self.octant.add_occupant(self)
 
     def __str__(self):
         return 'a Creature named %s' % self.name
 
 class Laborer(Creature):
 
-    def __init__(self, name, on_planet, in_octant, harvest_rate=0, build_rate=0):
-        super().__init__(name, on_planet, in_octant, move=1/5, health=5)
+    def __init__(self, name, on_planet, in_octant, player=0, harvest_rate=0, build_rate=0):
+        super().__init__(name, on_planet, in_octant, player, move=1/5)
         self.harvest_rate = harvest_rate
         self.build_rate = build_rate
 
@@ -57,7 +49,7 @@ class CrewMember(Laborer):
     def __init__(self, name, on_planet, in_octant):
         super().__init__(name, on_planet, in_octant, harvest_rate=1/12)
         #add the Flesh material to the material tags
-        add_tags(self, 'Flesh')
+        add_tags(self, ['Flesh'])
 
 class Engineer(CrewMember):
 
@@ -86,4 +78,4 @@ class Automaton(Laborer):
 
     def __init__(self, name, on_planet, in_octant):
         super().__init__(name, on_planet, in_octant, harvest_rate=1/6, build_rate=1/3)
-        self.tags['Material'].append('Metal')
+        add_tags(self, ['Metal'])

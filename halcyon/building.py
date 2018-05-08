@@ -1,18 +1,10 @@
+from object import Object
 from tags import add_tags, get_stat
 
-class Building_Plan():
+class Building_Plan(Object):
 
     def __init__(self, name, on_planet, in_octant, tags, player=0):
-        self.name = name
-        self.player = player
-        self.planet = on_planet
-        self.octant = in_octant
-        #add the building plan to the contents of the octant
-        self.octant.add_occupant(self)
-        #initialize the default, blank values for each tag category
-        self.tags = {'Material' : [], 'Structure' : [], 'Function' : []}
-        #send the tag argument to the add_tags function
-        add_tags(self, tags)
+        super().__init__(name, on_planet, in_octant, tags, player)
         #initalize the amount of Work needed to complete
         self.work_needed = get_stat(self, 'Work')
 
@@ -27,4 +19,7 @@ class Building_Plan():
         else:
             print('%d units of Work left until %s is completed' % (self.work_needed, self.name))
 
-#indi refactor your code to use a base object() class that has the name and player and planet and tag and octant stuff
+class Building(Object):
+
+    def __init__(self, name, on_planet, in_octant, tags, player=0):
+        super().__init__(name, on_planet, in_octant, tags, player)

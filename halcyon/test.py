@@ -1,13 +1,6 @@
-class ABC():
+import creature
+from planet import Planet
 
-    def __init__(self):
-        self.n = 1
+Dune = Planet('Arrakis', 5, 5)
 
-class EFF(ABC):
-
-    def __init__(self):
-        super().__init__()
-
-me = EFF()
-
-print(me.n)
+Jon = creature.Automaton('Jon', on_planet=Dune, in_octant=Dune.octants['North'])
