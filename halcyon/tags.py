@@ -50,11 +50,11 @@ def get_attributes(self):
         attributes += tag_attributes
     #repeat for structure tags
     for structure in self.tags['Structure']:
-        tag_attributes = STRUCTURE_TAGS[material]['Attributes']
+        tag_attributes = STRUCTURE_TAGS[structure]['Attributes']
         attributes += tag_attributes
     #repeat for function tags
     for function in self.tags['Function']:
-        tag_attributes = FUNCTION_TAGS[material]['Attributes']
+        tag_attributes = FUNCTION_TAGS[function]['Attributes']
         attributes += tag_attributes
     return attributes
 

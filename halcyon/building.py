@@ -1,5 +1,5 @@
 from object import Object
-from tags import add_tags, get_stat, get_all_tags
+from tags import add_tags, get_stat, get_all_tags, get_attributes
 
 class Building_Plan(Object):
 
@@ -33,3 +33,10 @@ class Building(Object):
 
     def __init__(self, name, on_planet, in_octant, tags, player=0):
         super().__init__(name, on_planet, in_octant, tags, player)
+
+    def get_functions(self):
+        attributes = get_attributes(self)
+        for attribute in attributes:
+            if '|' in attribute:
+                a = attribute.split('|')[1]
+                print(a)
