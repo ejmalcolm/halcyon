@@ -1,4 +1,11 @@
-import cpickle
+import pickle
+
+with open('tags_file.pickle', 'rb') as handle:
+    superlist = pickle.load(handle)
+
+MATERIAL_TAGS = superlist[0]
+STRUCTURE_TAGS = superlist[1]
+FUNCTION_TAGS = superlist[2]
 
 def add_tags(self, tags_list):
     for tag in tags:
