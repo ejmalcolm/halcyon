@@ -6,7 +6,7 @@ STRUCTURE_TAGS = {}
 
 FUNCTION_TAGS = {}
 
-def define_a_tag(category, name, list_attributes=[], health=0, work=0, function_slots=0):
+def define_a_tag(category, name, list_attributes=[], health=0, work=0, function_slots=0, func_cost=None):
     if category == 'material':
         MATERIAL_TAGS[name] = {'Attributes' : list_attributes,
                             'Statistics' : {'Health' : health, 'Work' : work, 'Functions Slots' : function_slots}}
@@ -31,9 +31,12 @@ define_a_tag('structure', 'Insulated', ['Insulated'], work=5)
 define_a_tag('structure', 'High Walls', ['Secure'], health=10, work=6)
 define_a_tag('structure', 'Extra Floor', health=3, work=6, function_slots=1)
 
-define_a_tag('function', 'Factory: Wood Crafts', ['Fabricate|Wood Crafts'], work=3 )
-define_a_tag('function', 'Build an Automaton', ['Spawn|Automaton'])
-####rest of function tags go here###
+define_a_tag('function', 'Factory: Wood Crafts', ['Fabricate|Wood Crafts'], work=3, func_cost='W')
+define_a_tag('function', 'Automaton Cradle', ['Spawn|Automaton'])
+define_a_tag('function', 'Refinery: Wood', ['Refine|Wooden Log'], work=3, func_cost='W')
+define_a_tag('function', 'Refinery: Stone', ['Refine|Stone Brick'], work=6, func_cost='S')
+define_a_tag('function', 'Refinery: Metal', ['Refine|Metal Bar'], work=9, func_cost='M')
+define_a_tag('function', 'Refinery: Iridium', ['Refine|Iridium'], work=18, func_cost = 'I')
 
 
 superlist = [MATERIAL_TAGS, STRUCTURE_TAGS, FUNCTION_TAGS]
