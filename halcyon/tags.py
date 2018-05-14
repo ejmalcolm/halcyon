@@ -8,7 +8,7 @@ STRUCTURE_TAGS = superlist[1]
 FUNCTION_TAGS = superlist[2]
 
 def add_tags(self, tags_list):
-    for tag in tags:
+    for tag in tags_list:
         if tag in MATERIAL_TAGS:
             self.tags['Material'].append(tag)
         elif tag in STRUCTURE_TAGS:

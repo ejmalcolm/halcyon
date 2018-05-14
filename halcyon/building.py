@@ -33,25 +33,5 @@ UNIQUE_FUNCTIONS = {}
 class Building(Object):
 
     def __init__(self, name, on_planet, in_octant, tags, player=0):
-        super().__init__(name, on_planet, in_octant, tags, player)
-
-    def define_functions(self):
-        functions = get_functions(self)
-        #gets all functions in a list
-        #in the form Category|Specific function
-        #ex. 'Fabricate|Wood Craft'
-        for func in functions:
-            category = func.split('|')[0]
-            specific = func.split('|')[1]
-
-    def use_function(self, category, specific):
-        if category == Spawn:
-            return specific()
-        elif category == Fabricate:
-            pass
-        elif category == Refine:
-            pass
-        elif category == Produce:
-            pass
-        elif category == Unique:
-            pass
+        super().__init__(name, on_planet, in_octant, player)
+        add_tags(self, tags)

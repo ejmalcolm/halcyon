@@ -46,14 +46,14 @@ class Laborer(Creature):
 
 class CrewMember(Laborer):
 
-    def __init__(self, name, on_planet, in_octant):
+    def __init__(self, name, on_planet, in_octant, player):
         super().__init__(name, on_planet, in_octant, harvest_rate=1/12)
         #add the Flesh material to the material tags
         add_tags(self, ['Flesh'])
 
 class Engineer(CrewMember):
 
-    def __init__(self, name, on_planet, in_octant):
+    def __init__(self, name, on_planet, in_octant, player):
         super().__init__(name, on_planet, in_octant)
 
     def make_building_plan(self):
@@ -61,21 +61,21 @@ class Engineer(CrewMember):
 
 class Soldier(CrewMember):
 
-    def __init__(self, name, on_planet, in_octant):
+    def __init__(self, name, on_planet, in_octant, player):
         super().__init__(name, on_planet, in_octant)
 
 class Researcher(CrewMember):
 
-    def __init__(self, name, on_planet, in_octant):
+    def __init__(self, name, on_planet, in_octant, player):
         super().__init__(name, on_planet, in_octant)
 
 class Artist(CrewMember):
 
-    def __init__(self, name, on_planet, in_octant):
+    def __init__(self, name, on_planet, in_octant, player):
         super().__init__(name, on_planet, in_octant)
 
 class Automaton(Laborer):
 
-    def __init__(self, name, on_planet, in_octant):
+    def __init__(self, name, on_planet, in_octant, player):
         super().__init__(name, on_planet, in_octant, harvest_rate=1/6, build_rate=1/3)
         add_tags(self, ['Metal'])
