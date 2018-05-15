@@ -28,7 +28,8 @@ class Laborer(Creature):
             #calculate the number of hours needed to finish the Task
             hours = (1/self.harvest_rate)
             #start the Task()
-            harvest_task = Task(hours, self.player.gain_resource, resource)
+            result = '%s gains 1 %s' % (self.player, resource)
+            harvest_task = Task(hours, self.player.gain_resource, resource, result)
             #report what's been done
             return '%s is now harvesting %s' % (self.name, resource)
         return 'there is no %s in %s' % (resource, self.octant)

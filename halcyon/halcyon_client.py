@@ -33,10 +33,10 @@ def make_display_list(list):
     return temp_text
 
 abc = Task(1, make_display_list)
-efg = Task(2, make_display_list)
+efg = Task(2, make_display_list, result='make a building')
 
 task_text = make_display_list(ACTIVE_TASKS)
-task_list = Message(task_view, text=task_text, padx=25, pady=0, bg='grey', width=600)
+task_list = Message(task_view, text=task_text, bg='grey', width=600)
 task_list.pack()
 
 mainloop()

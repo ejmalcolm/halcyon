@@ -15,7 +15,7 @@ def task_loop():
 
 class Task():
 
-    def __init__(self, hours_needed, end_func, arguments=[]):
+    def __init__(self, hours_needed, end_func, arguments=[], result=''):
         #calculates the end_time and saves it as an attribute
         #time() gets a relative number of seconds since the epoch
         #then, the number of hours (time_needed) is converted to seconds
@@ -26,9 +26,10 @@ class Task():
         ACTIVE_TASKS.append(self)
         #saves the arguments that will be needed as a list
         self.arguments = arguments
+        self.result = result
 
     def __str__(self):
-        return '%s will be executed in %s' % (self.end_func, self.check_progress())
+        return '%s in %s' % (self.result, self.check_progress())
 
     def check_progress(self):
         #if the end time has passed, call end_func())

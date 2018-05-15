@@ -17,11 +17,4 @@ c = vehicle.SpaceShip('Halcyon', Dune, Dune.octants['North'], 100000)
 
 b = creature.Creature('a', Dune, Dune.octants['North'], 0, 1)
 
-
 lab = creature.Laborer('bob', Dune, Dune.octants['South'], harvest_rate=5)
-
-def testfunc(teststring, test2):
-    print(teststring + test2)
-
-testtask = task.Task(1, testfunc, ['a', 'b'])
-testtask.end_func(*testtask.arguments)
