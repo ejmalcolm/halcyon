@@ -13,4 +13,10 @@ player_view.pack(padx=5, pady=5, side=RIGHT)
 zone_view = Frame(root, height=500, width=1000, bd=2, relief=SUNKEN, bg='purple')
 zone_view.pack(padx=5, pady=5)
 
+alert_view = Frame(root, height=100, width=600, bd=2, relief=SUNKEN, bg='orange')
+alert_view.pack(padx=5, pady=5)
+
+task_view = Frame(root, height=100, width=600, bd=2, relief=SUNKEN, bg='cyan')
+task_view.pack(padx=5, pady=5)
+
 mainloop()
