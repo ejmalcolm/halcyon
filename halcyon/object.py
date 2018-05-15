@@ -1,11 +1,12 @@
 from importlib import import_module
 from tags import add_tags
+from player import Player_Dict
 
 class Object():
 
     def __init__(self, name, on_planet, in_octant, player=0):
         self.name = name
-        self.player = player
+        self.player = Player_Dict[player]
         self.planet = on_planet
         self.octant = in_octant
         #add the object to the contents of the octant

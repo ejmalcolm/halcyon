@@ -25,6 +25,9 @@ class Task():
         #add self to active task list
         ACTIVE_TASKS.append(self)
 
+    def __str__(self):
+        return '%s will be executed in %s' % (self.end_func, self.check_progress())
+
     def check_progress(self):
         #if the end time has passed, call end_func())
         if self.end_time <= time():
@@ -37,5 +40,4 @@ class Task():
         minutes_left = int((seconds_left/60))
         if hours_left != 0:
             minutes_left -= (hours_left*60)
-        print('there are %s hours, %s minutes left' % (hours_left, minutes_left))
-        return False
+        return '%s hours, %s minutes' % (hours_left, minutes_left)

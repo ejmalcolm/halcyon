@@ -14,5 +14,7 @@ c = vehicle.SpaceShip('Halcyon', Dune, Dune.octants['North'], 100000)
 
 b = creature.Creature('a', Dune, Dune.octants['North'], 0, 1)
 
-z = a.use_function('Fabricate|Wood Craft')
-print(z)
+
+lab = creature.Laborer('bob', Dune, Dune.octants['South'], harvest_rate=5)
+print(lab.octant.resources)
+print(lab.harvest_resource('wood'))

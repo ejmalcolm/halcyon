@@ -14,7 +14,7 @@ class Building_Plan(Object):
     def work_on(self, amount):
         self.work_needed -= amount
         if self.work_needed == 0:
-            #self.plan_finished()
+            self.plan_finished()
             print('A %s on %s, in %s, was finished.' %(self.name, self.planet, self.octant))
         else:
             print('%d units of Work left until %s is completed' % (self.work_needed, self.name))
@@ -27,8 +27,6 @@ class Building_Plan(Object):
         #not overwriting the class every time, it still exists
         created_building = Building(self.name, self.planet, self.octant, self.get_all_tags(), self.player)
         return created_building
-
-UNIQUE_FUNCTIONS = {}
 
 class Building(Object):
 
