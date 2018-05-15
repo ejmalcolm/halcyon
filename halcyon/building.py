@@ -35,3 +35,6 @@ class Building(Object):
     def __init__(self, name, on_planet, in_octant, tags, player=0):
         super().__init__(name, on_planet, in_octant, player)
         add_tags(self, tags)
+
+    def __str__(self):
+        return 'a %s' % self.name
