@@ -1,12 +1,12 @@
 from object import Object
-from tags import add_tags, get_stat, get_all_tags, get_functions
+from tags import add_tags
 
 class Building_Plan(Object):
 
     def __init__(self, name, on_planet, in_octant, tags, player=0):
         super().__init__(name, on_planet, in_octant, tags, player)
         #initalize the amount of Work needed to complete
-        self.work_needed = get_stat(self, 'Work')
+        self.work_needed = self.get_stat('Work')
 
     def __str__(self):
         return 'a building plan for a %s' % self.name
@@ -25,7 +25,7 @@ class Building_Plan(Object):
         #create a Building() object and throw it the octant contents
         #this can repeat because variable names are just pointers
         #not overwriting the class every time, it still exists
-        created_building = Building(self.name, self.planet, self.octant, get_all_tags(self), self.player)
+        created_building = Building(self.name, self.planet, self.octant, self.get_all_tags(), self.player)
         return created_building
 
 UNIQUE_FUNCTIONS = {}
