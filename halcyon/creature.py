@@ -53,26 +53,17 @@ class CrewMember(Laborer):
 
 class Engineer(CrewMember):
 
-    def __init__(self, name, on_planet, in_octant, player):
-        super().__init__(name, on_planet, in_octant)
-
     def make_building_plan(self):
         return self.octant
 
 class Soldier(CrewMember):
-
-    def __init__(self, name, on_planet, in_octant, player):
-        super().__init__(name, on_planet, in_octant)
+    pass
 
 class Researcher(CrewMember):
-
-    def __init__(self, name, on_planet, in_octant, player):
-        super().__init__(name, on_planet, in_octant)
+    pass
 
 class Artist(CrewMember):
-
-    def __init__(self, name, on_planet, in_octant, player):
-        super().__init__(name, on_planet, in_octant)
+    pass
 
 class Automaton(Laborer):
 

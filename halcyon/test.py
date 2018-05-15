@@ -14,5 +14,5 @@ c = vehicle.SpaceShip('Halcyon', Dune, Dune.octants['North'], 100000)
 
 b = creature.Creature('a', Dune, Dune.octants['North'], 0, 1)
 
-z = a.use_function('Spawn|Automaton')
+z = a.use_function('Fabricate|Wood Craft')
 print(z)
