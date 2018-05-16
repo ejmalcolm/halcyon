@@ -14,17 +14,18 @@ class Ui_Halcyon(object):
         Halcyon.resize(1200, 745)
         self.centralwidget = QtWidgets.QWidget(Halcyon)
         self.centralwidget.setObjectName("centralwidget")
-
-        self.PlanetView = QtWidgets.QListView(self.centralwidget)
+        #define planetview
+        self.PlanetView = QtWidgets.QListWidget(self.centralwidget)
         self.PlanetView.setGeometry(QtCore.QRect(10, 10, 225, 550))
         self.PlanetView.setToolTip("")
         self.PlanetView.setObjectName("PlanetView")
-
-        self.PlayerView = QtWidgets.QListView(self.centralwidget)
+        self.PlanetView.addItem('y')
+        #define playerview
+        self.PlayerView = QtWidgets.QListWidget(self.centralwidget)
         self.PlayerView.setGeometry(QtCore.QRect(965, 10, 225, 550))
         self.PlayerView.setToolTip("")
         self.PlayerView.setObjectName("PlayerView")
-
+        #define the octant label that says 'OctantView'
         self.OctantLabel = QtWidgets.QLabel(self.centralwidget)
         self.OctantLabel.setGeometry(QtCore.QRect(470, 0, 211, 31))
         self.OctantLabel.setStyleSheet("font: 24pt \"Sitka\";")
@@ -32,16 +33,16 @@ class Ui_Halcyon(object):
         self.OctantLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.OctantLabel.setIndent(-1)
         self.OctantLabel.setObjectName("OctantLabel")
-
-        self.OctantView = QtWidgets.QListView(self.centralwidget)
+        #define the central large octant view
+        self.OctantView = QtWidgets.QListWidget(self.centralwidget)
         self.OctantView.setGeometry(QtCore.QRect(250, 40, 701, 521))
         self.OctantView.setObjectName("OctantView")
-
-        self.AlertView = QtWidgets.QListView(self.centralwidget)
+        #define the alert view for messages/alerts
+        self.AlertView = QtWidgets.QListWidget(self.centralwidget)
         self.AlertView.setGeometry(QtCore.QRect(10, 570, 581, 121))
         self.AlertView.setObjectName("AlertView")
-
-        self.TaskQueue = QtWidgets.QListView(self.centralwidget)
+        #define the task queue that shows all tasks
+        self.TaskQueue = QtWidgets.QListWidget(self.centralwidget)
         self.TaskQueue.setGeometry(QtCore.QRect(610, 570, 581, 121))
         self.TaskQueue.setObjectName("TaskQueue")
 
