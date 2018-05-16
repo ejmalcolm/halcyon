@@ -33,7 +33,7 @@ class Laborer(Creature):
                 return 'harvesting rate of %s is zero' % self
             #start the Task()
             result = '%s gains 1 %s' % (self.player, resource)
-            harvest_task = Task(hours, self.player.gain_resource, resource, result)
+            harvest_task = Task(hours, self.player.gain_resource, self.player, resource, result)
             #report what's been done
             return '%s is now harvesting %s' % (self.name, resource)
         return 'there is no %s in %s' % (resource, self.octant)
@@ -50,7 +50,8 @@ class Laborer(Creature):
                 except:
                     return 'building rate of %s is zero' % self
                 #start the Task()
-                build_task = Task(hours, end_func = building_plan.work_on, arguments=[1],
+                build_task = Task(hours, building_plan.work_on,
+                                    self.player, arguments=[1],
                                     result = '%s constructs %s' % (self, building_plan))
                 #report what's been done
                 return '%s is now constructing %s' % (self.name, building_plan)

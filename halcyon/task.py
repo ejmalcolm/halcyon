@@ -15,7 +15,7 @@ def task_loop():
 
 class Task():
 
-    def __init__(self, hours_needed, end_func, arguments=[], result=''):
+    def __init__(self, hours_needed, end_func, player, arguments=[], result=''):
         #calculates the end_time and saves it as an attribute
         #time() gets a relative number of seconds since the epoch
         #then, the number of hours (time_needed) is converted to seconds
