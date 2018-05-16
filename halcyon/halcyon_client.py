@@ -1,42 +1,70 @@
-import tkinter as tk
-from task import ACTIVE_TASKS, Task
+# -*- coding: utf-8 -*-
 
-def make_display_list(list):
-    #takes a list of items and splits them up into a string
-    #where each item is on a newline
-    temp_text = ''
-    for item in list:
-        if item != list[-1]:
-            temp_text += str(item) + '\n'
-        else:
-            temp_text += str(item)
-    return temp_text
+# Form implementation generated from reading ui file 'halcyon_client.ui'
+#
+# Created by: PyQt5 UI code generator 5.10.1
+#
+# WARNING! All changes made in this file will be lost!
 
-class HalcyonClient(tk.Tk):
+from PyQt5 import QtCore, QtGui, QtWidgets
 
-    def __init__(self):
-        tk.Tk.__init__(self)
-        self.frame = None
-        self.switch_frame(LoginPage)
+class Ui_Halcyon(object):
+    def setupUi(self, Halcyon):
+        Halcyon.setObjectName("Halcyon")
+        Halcyon.resize(1200, 745)
+        self.centralwidget = QtWidgets.QWidget(Halcyon)
+        self.centralwidget.setObjectName("centralwidget")
+        self.PlanetView = QtWidgets.QListView(self.centralwidget)
+        self.PlanetView.setGeometry(QtCore.QRect(10, 10, 225, 550))
+        self.PlanetView.setToolTip("")
+        self.PlanetView.setObjectName("PlanetView")
+        self.PlayerView = QtWidgets.QListView(self.centralwidget)
+        self.PlayerView.setGeometry(QtCore.QRect(965, 10, 225, 550))
+        self.PlayerView.setToolTip("")
+        self.PlayerView.setObjectName("PlayerView")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(470, 0, 211, 31))
+        self.label.setStyleSheet("font: 24pt \"Sitka\";")
+        self.label.setTextFormat(QtCore.Qt.AutoText)
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setIndent(-1)
+        self.label.setObjectName("label")
+        self.listView = QtWidgets.QListView(self.centralwidget)
+        self.listView.setGeometry(QtCore.QRect(250, 40, 701, 521))
+        self.listView.setObjectName("listView")
+        self.listView_2 = QtWidgets.QListView(self.centralwidget)
+        self.listView_2.setGeometry(QtCore.QRect(10, 570, 581, 121))
+        self.listView_2.setObjectName("listView_2")
+        self.listView_3 = QtWidgets.QListView(self.centralwidget)
+        self.listView_3.setGeometry(QtCore.QRect(610, 570, 581, 121))
+        self.listView_3.setObjectName("listView_3")
+        Halcyon.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(Halcyon)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1200, 21))
+        self.menubar.setObjectName("menubar")
+        self.menutewst = QtWidgets.QMenu(self.menubar)
+        self.menutewst.setObjectName("menutewst")
+        Halcyon.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(Halcyon)
+        self.statusbar.setObjectName("statusbar")
+        Halcyon.setStatusBar(self.statusbar)
+        self.menubar.addAction(self.menutewst.menuAction())
 
-    def switch_frame(self, new_frame_class):
-        new_frame = new_frame_class(self)
-        if self.frame is not None:
-            self.frame.destroy()
-        self.frame = new_frame
-        self.frame.pack()
+        self.retranslateUi(Halcyon)
+        QtCore.QMetaObject.connectSlotsByName(Halcyon)
 
-class LoginPage(tk.Frame):
+    def retranslateUi(self, Halcyon):
+        _translate = QtCore.QCoreApplication.translate
+        Halcyon.setWindowTitle(_translate("Halcyon", "Halcyon -- Client"))
+        self.label.setText(_translate("Halcyon", "Octant View"))
+        self.menutewst.setTitle(_translate("Halcyon", "Menu"))
 
-    def __init__(self, master):
-        tk.Frame.__init__(self, master)
-        loginlabel = tk.Label(self, text='Enter your player name.')
-        loginlabel.pack()
-        loginentry = tk.Entry(self)
-        loginentry.pack()
-        loginbutton = tk.Button(self, text='Login')
-        loginbutton.pack()
 
-a = HalcyonClient()
-
-a.mainloop()
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    Halcyon = QtWidgets.QMainWindow()
+    ui = Ui_Halcyon()
+    ui.setupUi(Halcyon)
+    Halcyon.show()
+    sys.exit(app.exec_())
