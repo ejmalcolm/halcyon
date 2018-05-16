@@ -1,10 +1,10 @@
 from importlib import import_module
 from tags import add_tags
-from player import Player_List, GM
+from player import GM
 
 class Object():
 
-    def __init__(self, name, on_planet, in_octant, player=GM):
+    def __init__(self, name, on_planet, in_octant, player):
         self.name = name
         self.player = player
         self.planet = on_planet

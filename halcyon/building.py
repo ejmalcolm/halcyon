@@ -3,7 +3,7 @@ from tags import add_tags
 
 class Building_Plan(Object):
 
-    def __init__(self, name, on_planet, in_octant, tags, player=0):
+    def __init__(self, name, on_planet, in_octant, tags, player):
         super().__init__(name, on_planet, in_octant, player)
         #initalize the amount of Work needed to complete
         self.work_needed = self.get_stat('Work')
@@ -34,7 +34,7 @@ class Building_Plan(Object):
 
 class Building(Object):
 
-    def __init__(self, name, on_planet, in_octant, tags, player=0):
+    def __init__(self, name, on_planet, in_octant, tags, player):
         super().__init__(name, on_planet, in_octant, player)
         add_tags(self, tags)
 

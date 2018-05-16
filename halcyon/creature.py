@@ -2,7 +2,6 @@ from object import Object
 from tags import add_tags
 from task import Task
 from building import Building_Plan
-from player import GM
 
 class Creature(Object):
 
@@ -15,7 +14,7 @@ class Creature(Object):
 
 class Laborer(Creature):
 
-    def __init__(self, name, on_planet, in_octant, player=GM, harvest_rate=0, build_rate=0):
+    def __init__(self, name, on_planet, in_octant, player, harvest_rate=0, build_rate=0):
         super().__init__(name, on_planet, in_octant, player, move=1/5)
         self.harvest_rate = harvest_rate
         self.build_rate = build_rate

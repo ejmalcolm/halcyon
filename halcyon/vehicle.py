@@ -1,18 +1,19 @@
 from object import Object
+from player import GM
 
 class Vehicle(Object):
 
-    def __init__(self, name, on_planet, in_octant, move=0, player=0, terrain='Terrestial'):
+    def __init__(self, name, on_planet, in_octant, move=0, player=GM, terrain='Terrestial'):
         super().__init__(name, on_planet, in_octant, player=player)
         self.move = move
         self.terrain = terrain
 
 class SpaceShip(Vehicle):
 
-    def __init__(self, name, on_planet, in_octant, space_move_miles, player=0):
+    def __init__(self, name, on_planet, in_octant, space_move_miles, player=GM):
         super().__init__(name, on_planet, in_octant, player, terrain='Space')
         self.spmove = space_move_miles
-        is_operable = bool(self.planet == 'Space')
+        is_operable = bool(self.planet.name == 'Space')
 
 class Halcyon(SpaceShip):
 
