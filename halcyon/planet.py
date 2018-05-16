@@ -19,12 +19,12 @@ def unique_chance():
 CARDINAL_DIRECTIONS = ('North', 'East', 'South', 'West', 'Northeast', 'Northwest', 'Southeast', 'Southwest')
 BIOMES = ('aquatic', 'aquatic', 'desert', 'forest', 'grassland', 'tundra', 'hills')
 RESOURCE_DISTRIBUTION = {
-    'aquatic': ('none', 'none', 'stone', unique_chance(), unique_chance()),
-    'desert': ('none', 'none', 'stone', 'stone', unique_chance()),
-    'forest': ('none', 'none', 'wood', 'wood', unique_chance()),
-    'grassland': ('none', 'none', 'stone', 'wood', unique_chance()),
-    'tundra': ('none', 'none', 'metal', 'metal', unique_chance()),
-    'hills': ('none', 'none', 'stone', 'metal', unique_chance())
+    'aquatic': ('none', 'none', 'Stone', unique_chance(), unique_chance()),
+    'desert': ('none', 'none', 'Stone', 'Stone', unique_chance()),
+    'forest': ('none', 'none', 'Wood', 'Wood', unique_chance()),
+    'grassland': ('none', 'none', 'Stone', 'Wood', unique_chance()),
+    'tundra': ('none', 'none', 'Metal', 'Metal', unique_chance()),
+    'hills': ('none', 'none', 'Stone', 'Metal', unique_chance())
 }
 
 
@@ -61,7 +61,7 @@ class Civilization():
 
 class Octant():
 
-    def __init__(self, name):
+    def __init__(self, name, planet):
         self.name = name
         self.biome = random_biome()
         self.resources = resource_in(self.biome)
@@ -70,9 +70,10 @@ class Octant():
         if does_civilization_exist():
             self.civilization = Civilization(tier=random.randint(1, 5), status='Neutral')
             self.contents.append(self.civilization)
+        self.planet = planet
 
     def __str__(self):
-        return 'the %s octant of the planet' % self.name
+        return 'the %s octant of %s' % (self.name, self.planet)
 
     def add_occupant(self, occupant):
         self.contents.append(occupant)
@@ -86,7 +87,7 @@ class Planet():
         self.name = name
         octants = {}
         for direction in CARDINAL_DIRECTIONS:
-            octants[direction] = Octant(name=direction)
+            octants[direction] = Octant(name=direction, planet=self)
         self.octants = octants
 
     def __str__(self):

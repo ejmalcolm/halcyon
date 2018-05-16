@@ -4,12 +4,16 @@ from tags import add_tags
 class Building_Plan(Object):
 
     def __init__(self, name, on_planet, in_octant, tags, player=0):
-        super().__init__(name, on_planet, in_octant, tags, player)
+        super().__init__(name, on_planet, in_octant, player)
         #initalize the amount of Work needed to complete
         self.work_needed = self.get_stat('Work')
+        #add the tags
+        add_tags(self, tags)
+        #define what resource/s is needed to build the plan
+        self.resource_needed = self.tags['Material']
 
     def __str__(self):
-        return 'a building plan for a %s' % self.name
+        return 'building plan for a %s' % self.name
 
     def work_on(self, amount):
         self.work_needed -= amount
@@ -35,4 +39,4 @@ class Building(Object):
         add_tags(self, tags)
 
     def __str__(self):
-        return 'a %s' % self.name
+        return self.name

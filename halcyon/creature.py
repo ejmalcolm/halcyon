@@ -1,6 +1,7 @@
 from object import Object
 from tags import add_tags
 from task import Task
+from building import Building_Plan
 
 class Creature(Object):
 
@@ -9,7 +10,7 @@ class Creature(Object):
         self.move = move
 
     def __str__(self):
-        return 'a Creature named %s' % self.name
+        return 'Creature named %s' % self.name
 
 class Laborer(Creature):
 
@@ -19,14 +20,17 @@ class Laborer(Creature):
         self.build_rate = build_rate
 
     def __str__(self):
-        return 'a Laborer named %s' % self.name
+        return 'Laborer named %s' % self.name
 
     def harvest_resource(self, resource):
         '''starts a Task() of harvesting the given resource if the resource is in the same octant'''
         #check if the resource is in the same octant
         if resource in self.octant.resources:
             #calculate the number of hours needed to finish the Task
-            hours = (1/self.harvest_rate)
+            try:
+                hours = (1/self.harvest_rate)
+            except:
+                return 'harvesting rate of %s is zero' % self
             #start the Task()
             result = '%s gains 1 %s' % (self.player, resource)
             harvest_task = Task(hours, self.player.gain_resource, resource, result)
@@ -37,12 +41,19 @@ class Laborer(Creature):
     def construct_building(self, building_plan):
         '''starts a task of building the given plan if the plan is in the same octant'''
         if building_plan in self.octant.contents:
-            #hours needed to finish the task
-            hours = (1/self.build_rate)
-            #start the Task()
-            build_task = Task(self, hours, building_plan.plan_finished())
-            #report what's been done
-            return '%s is now building %s' % (self.name, building_plan)
+            #check if the needed resource is available
+            resource_check = all(resources in building_plan.resource_needed for resources in self.player.resources)
+            if resource_check:
+                #hours needed to finish the task
+                try:
+                    hours = (1/self.build_rate)
+                except:
+                    return 'building rate of %s is zero' % self
+                #start the Task()
+                build_task = Task(hours, end_func = building_plan.plan_finished,
+                                    result = '%s constructs %s' % (self, building_plan))
+                #report what's been done
+                return '%s is now constructing %s' % (self.name, building_plan)
         return 'there is no unfinished %s in %s' % (building_plan, self.octant)
 
 class CrewMember(Laborer):
@@ -54,8 +65,8 @@ class CrewMember(Laborer):
 
 class Engineer(CrewMember):
 
-    def make_building_plan(self):
-        return self.octant
+    def make_building_plan(self, name, tags):
+        created_plan = Building_Plan(name, self.planet, self.octant, tags, self.player)
 
 class Soldier(CrewMember):
     pass

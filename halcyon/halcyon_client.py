@@ -32,7 +32,7 @@ def make_display_list(list):
             temp_text += str(item)
     return temp_text
 
-abc = Task(1, make_display_list)
+abc = Task(1, make_display_list, result='gain wood')
 efg = Task(2, make_display_list, result='make a building')
 
 task_text = make_display_list(ACTIVE_TASKS)

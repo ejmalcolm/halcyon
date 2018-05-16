@@ -17,4 +17,11 @@ c = vehicle.SpaceShip('Halcyon', Dune, Dune.octants['North'], 100000)
 
 b = creature.Creature('a', Dune, Dune.octants['North'], 0, 1)
 
-lab = creature.Laborer('bob', Dune, Dune.octants['South'], harvest_rate=5)
+lab = creature.Laborer('bob', Dune, Dune.octants['North'], build_rate=5)
+
+d = building.Building_Plan('buh', Dune, Dune.octants['North'], ['Wood', 'Metal'])
+
+z = d.resource_needed
+
+print(lab.construct_building(d))
+print(str(task.ACTIVE_TASKS[0]))
