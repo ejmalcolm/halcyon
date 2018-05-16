@@ -1,12 +1,12 @@
 from importlib import import_module
 from tags import add_tags
-from player import Player_Dict
+from player import Player_List, GM
 
 class Object():
 
-    def __init__(self, name, on_planet, in_octant, player=0):
+    def __init__(self, name, on_planet, in_octant, player=GM):
         self.name = name
-        self.player = Player_Dict[player]
+        self.player = player
         self.planet = on_planet
         self.octant = in_octant
         #add the object to the contents of the octant

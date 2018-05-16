@@ -2,6 +2,7 @@ from object import Object
 from tags import add_tags
 from task import Task
 from building import Building_Plan
+from player import GM
 
 class Creature(Object):
 
@@ -14,7 +15,7 @@ class Creature(Object):
 
 class Laborer(Creature):
 
-    def __init__(self, name, on_planet, in_octant, player=0, harvest_rate=0, build_rate=0):
+    def __init__(self, name, on_planet, in_octant, player=GM, harvest_rate=0, build_rate=0):
         super().__init__(name, on_planet, in_octant, player, move=1/5)
         self.harvest_rate = harvest_rate
         self.build_rate = build_rate
@@ -50,7 +51,7 @@ class Laborer(Creature):
                 except:
                     return 'building rate of %s is zero' % self
                 #start the Task()
-                build_task = Task(hours, end_func = building_plan.plan_finished,
+                build_task = Task(hours, end_func = building_plan.work_on, arguments=[1],
                                     result = '%s constructs %s' % (self, building_plan))
                 #report what's been done
                 return '%s is now constructing %s' % (self.name, building_plan)

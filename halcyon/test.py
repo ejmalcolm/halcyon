@@ -7,7 +7,6 @@ import player
 import task
 
 Dune = planet.Planet('Arrakis', 5, 5)
-GM = player.Player('gamemaster', 0)
 
 ##dont delete above this plzty
 
@@ -23,5 +22,15 @@ d = building.Building_Plan('buh', Dune, Dune.octants['North'], ['Wood', 'Metal']
 
 z = d.resource_needed
 
+z = []
+for object in Dune.octants['North'].contents:
+    print(str(object))
+
 print(lab.construct_building(d))
-print(str(task.ACTIVE_TASKS[0]))
+z = task.ACTIVE_TASKS[0]
+
+z.end_func(*z.arguments)
+
+z = []
+for object in Dune.octants['North'].contents:
+    print(str(object))

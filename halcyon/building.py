@@ -17,7 +17,7 @@ class Building_Plan(Object):
 
     def work_on(self, amount):
         self.work_needed -= amount
-        if self.work_needed == 0:
+        if self.work_needed <= 0:
             self.plan_finished()
             print('A %s on %s, in %s, was finished.' %(self.name, self.planet, self.octant))
         else:
