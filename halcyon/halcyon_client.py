@@ -14,30 +14,37 @@ class Ui_Halcyon(object):
         Halcyon.resize(1200, 745)
         self.centralwidget = QtWidgets.QWidget(Halcyon)
         self.centralwidget.setObjectName("centralwidget")
+
         self.PlanetView = QtWidgets.QListView(self.centralwidget)
         self.PlanetView.setGeometry(QtCore.QRect(10, 10, 225, 550))
         self.PlanetView.setToolTip("")
         self.PlanetView.setObjectName("PlanetView")
+
         self.PlayerView = QtWidgets.QListView(self.centralwidget)
         self.PlayerView.setGeometry(QtCore.QRect(965, 10, 225, 550))
         self.PlayerView.setToolTip("")
         self.PlayerView.setObjectName("PlayerView")
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(470, 0, 211, 31))
-        self.label.setStyleSheet("font: 24pt \"Sitka\";")
-        self.label.setTextFormat(QtCore.Qt.AutoText)
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
-        self.label.setIndent(-1)
-        self.label.setObjectName("label")
-        self.listView = QtWidgets.QListView(self.centralwidget)
-        self.listView.setGeometry(QtCore.QRect(250, 40, 701, 521))
-        self.listView.setObjectName("listView")
-        self.listView_2 = QtWidgets.QListView(self.centralwidget)
-        self.listView_2.setGeometry(QtCore.QRect(10, 570, 581, 121))
-        self.listView_2.setObjectName("listView_2")
-        self.listView_3 = QtWidgets.QListView(self.centralwidget)
-        self.listView_3.setGeometry(QtCore.QRect(610, 570, 581, 121))
-        self.listView_3.setObjectName("listView_3")
+
+        self.OctantLabel = QtWidgets.QLabel(self.centralwidget)
+        self.OctantLabel.setGeometry(QtCore.QRect(470, 0, 211, 31))
+        self.OctantLabel.setStyleSheet("font: 24pt \"Sitka\";")
+        self.OctantLabel.setTextFormat(QtCore.Qt.AutoText)
+        self.OctantLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.OctantLabel.setIndent(-1)
+        self.OctantLabel.setObjectName("OctantLabel")
+
+        self.OctantView = QtWidgets.QListView(self.centralwidget)
+        self.OctantView.setGeometry(QtCore.QRect(250, 40, 701, 521))
+        self.OctantView.setObjectName("OctantView")
+
+        self.AlertView = QtWidgets.QListView(self.centralwidget)
+        self.AlertView.setGeometry(QtCore.QRect(10, 570, 581, 121))
+        self.AlertView.setObjectName("AlertView")
+
+        self.TaskQueue = QtWidgets.QListView(self.centralwidget)
+        self.TaskQueue.setGeometry(QtCore.QRect(610, 570, 581, 121))
+        self.TaskQueue.setObjectName("TaskQueue")
+
         Halcyon.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(Halcyon)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1200, 21))
@@ -56,7 +63,7 @@ class Ui_Halcyon(object):
     def retranslateUi(self, Halcyon):
         _translate = QtCore.QCoreApplication.translate
         Halcyon.setWindowTitle(_translate("Halcyon", "Halcyon -- Client"))
-        self.label.setText(_translate("Halcyon", "Octant View"))
+        self.OctantLabel.setText(_translate("Halcyon", "Octant View"))
         self.menutewst.setTitle(_translate("Halcyon", "Menu"))
 
 
