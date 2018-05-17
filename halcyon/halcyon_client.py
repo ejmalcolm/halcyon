@@ -10,6 +10,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from planet import Planet
 
 PLANETS = { 'Dune' : Planet('Dune', 1, 2)}
+TASKS = {}
 
 class DetailView(QtWidgets.QListWidget):
     '''The class for displaying lists of class objects
@@ -20,11 +21,6 @@ class DetailView(QtWidgets.QListWidget):
         super().__init__(parent)
         self.class_dict = class_dict
         self.player = player
-        self.itemClicked.connect(self.Clicked)
-
-    def Clicked(self, item):
-        item_text = item.text()
-        print(self.class_dict[item_text])
 
 class Ui_Halcyon(object):
 
@@ -36,12 +32,10 @@ class Ui_Halcyon(object):
         ##define planetview
         self.PlanetView = DetailView(self.centralwidget, PLANETS, 2)
         self.PlanetView.setGeometry(QtCore.QRect(10, 10, 225, 550))
-        self.PlanetView.setToolTip("")
         self.PlanetView.setObjectName("PlanetView")
         ##define playerview
         self.PlayerView = QtWidgets.QListWidget(self.centralwidget)
         self.PlayerView.setGeometry(QtCore.QRect(965, 10, 225, 550))
-        self.PlayerView.setToolTip("")
         self.PlayerView.setObjectName("PlayerView")
         ##define the octant label that says 'OctantView'
         self.OctantLabel = QtWidgets.QLabel(self.centralwidget)
