@@ -7,9 +7,12 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+
+import inspect
+
 from planet import Planet
 
-PLANETS = { 'Dune' : Planet('Dune', 1, 2)}
+PLANETS = {'Dune' : Planet('Dune', 1, 2), 'Hoth' : Planet('Hoth', 2, 4)}
 TASKS = {}
 
 class DetailView(QtWidgets.QListWidget):
@@ -21,6 +24,33 @@ class DetailView(QtWidgets.QListWidget):
         super().__init__(parent)
         self.class_dict = class_dict
         self.player = player
+        self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.openMenu)
+
+    def openMenu(self, position):
+        #grab which class item is being requested
+        item = self.class_dict[self.selectedItems()[0].text()]
+        #make the context menu and add all options
+        menu = QtWidgets.QMenu()
+        #testing shit
+        item_methods = inspect.getmembers(item, predicate=inspect.ismethod)
+        for method in item_methods:
+            text = method[0]
+            action = method[1]
+            newAction = menu.addAction(text)
+            newAction.function = action
+        menu.triggered.connect(self.duhprint)
+        quitAction = menu.addAction("Quit")
+        #implement the actions each option is linked to
+        action = menu.exec_(self.mapToGlobal(position))
+        #if action == quitAction:
+            #app.quit()
+
+    def duhprint(self, thing):
+        try:
+            print(thing.function())
+        except Exception as e:
+            print(e)
 
 class Ui_Halcyon(object):
 

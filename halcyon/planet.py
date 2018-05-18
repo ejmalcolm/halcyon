@@ -89,6 +89,10 @@ class Planet():
         for direction in CARDINAL_DIRECTIONS:
             octants[direction] = Octant(name=direction, planet=self)
         self.octants = octants
+        #set the usable methods for the GUI
+        self.client_methods = {'Get description' : self.get_description,
+                                'Get octant biome' : self.get_octant_biome
+                                }
 
     def __str__(self):
         return 'a planet named %s' % self.name

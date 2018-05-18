@@ -5,6 +5,7 @@ import creature
 import tags
 import player
 import task
+import inspect
 
 Dune = planet.Planet('Arrakis', 5, 5)
 
@@ -19,3 +20,5 @@ crtr = creature.Creature('a', Dune, Dune.octants['North'], 0, 1)
 labor = creature.Laborer('bob', Dune, Dune.octants['North'], build_rate=5, player=player.GM)
 
 bplan = building.Building_Plan('buh', Dune, Dune.octants['North'], ['Wood', 'Metal'], player.GM)
+
+print(inspect.getmembers(Dune, predicate=inspect.ismethod))
