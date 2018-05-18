@@ -36,12 +36,15 @@ class DetailView(QtWidgets.QListWidget):
         #dictionary is in the form {'Method name' : method_object}
         item_methods = item.client_methods
         #add all the methods as QActions
+        ##!!need a way of getting additional parameters if the function needs it
+        ##!!for example, get_octant_biome needs the octant name
+        ##!!have to be able to give that from the gui somehow
         for method in item_methods:
             text = method
             action = item_methods[method]
             newAction = menu.addAction(text)
             newAction.function = action
-        #connect each
+        #connect each to the display_alert function so that the output is shown
         try:
             menu.triggered.connect(ui.display_alert)
         except Exception as e:
@@ -108,9 +111,10 @@ class Ui_Halcyon(object):
         self.OctantLabel.setText(_translate("Halcyon", "Octant View"))
         self.menutewst.setTitle(_translate("Halcyon", "Menu"))
 
-    def display_alert(self, alert):
+    def display_alert(self, alert_action):
         try:
-            self.AlertView.setHtml(alert.function())
+            #get the alert, activate its function, and display the result
+            self.AlertView.setHtml(alert_action.bound_function())
         except Exception as e:
             print(e)
 
