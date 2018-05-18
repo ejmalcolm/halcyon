@@ -30,27 +30,25 @@ class DetailView(QtWidgets.QListWidget):
     def openMenu(self, position):
         #grab which class item is being requested
         item = self.class_dict[self.selectedItems()[0].text()]
-        #make the context menu and add all options
+        #make the context menu
         menu = QtWidgets.QMenu()
-        #testing shit
-        item_methods = inspect.getmembers(item, predicate=inspect.ismethod)
+        #get all the client methods of that class as a dictionary
+        #dictionary is in the form {'Method name' : method_object}
+        item_methods = item.client_methods
+        #add all the methods as QActions
         for method in item_methods:
-            text = method[0]
-            action = method[1]
+            text = method
+            action = item_methods[method]
             newAction = menu.addAction(text)
             newAction.function = action
-        menu.triggered.connect(self.duhprint)
-        quitAction = menu.addAction("Quit")
-        #implement the actions each option is linked to
-        action = menu.exec_(self.mapToGlobal(position))
-        #if action == quitAction:
-            #app.quit()
-
-    def duhprint(self, thing):
+        #connect each
         try:
-            print(thing.function())
+            menu.triggered.connect(ui.display_alert)
         except Exception as e:
             print(e)
+        #implement the actions each option is linked to
+        action = menu.exec_(self.mapToGlobal(position))
+
 
 class Ui_Halcyon(object):
 
@@ -80,7 +78,8 @@ class Ui_Halcyon(object):
         self.OctantView.setGeometry(QtCore.QRect(250, 40, 701, 521))
         self.OctantView.setObjectName("OctantView")
         ##define the alert view for messages/alerts
-        self.AlertView = QtWidgets.QListWidget(self.centralwidget)
+        self.AlertView = QtWidgets.QTextEdit(self.centralwidget)
+        self.AlertView.setReadOnly(True)
         self.AlertView.setGeometry(QtCore.QRect(10, 570, 581, 121))
         self.AlertView.setObjectName("AlertView")
         ##define the task queue that shows all tasks
@@ -108,6 +107,12 @@ class Ui_Halcyon(object):
         Halcyon.setWindowTitle(_translate("Halcyon", "Halcyon -- Client"))
         self.OctantLabel.setText(_translate("Halcyon", "Octant View"))
         self.menutewst.setTitle(_translate("Halcyon", "Menu"))
+
+    def display_alert(self, alert):
+        try:
+            self.AlertView.setHtml(alert.function())
+        except Exception as e:
+            print(e)
 
 if __name__ == "__main__":
     import sys
