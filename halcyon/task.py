@@ -1,5 +1,4 @@
 from time import time, sleep
-import weakref
 
 ACTIVE_TASKS = []
 

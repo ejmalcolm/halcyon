@@ -1,5 +1,4 @@
 import random
-import weakref
 from collections import Counter, namedtuple
 
 # A planet has eight octants: NW, N, NE, E, SE, S, SW, W
@@ -85,7 +84,7 @@ class Planet():
 
     def __init__(self, name):
         #add self to instances for gamestate purposes
-        self.__class__.instances.append(weakref.proxy(self))
+        self.__class__.instances.append(self)
         #rest of init
         self.name = name
         octants = {}

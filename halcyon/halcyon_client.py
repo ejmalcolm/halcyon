@@ -8,10 +8,16 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from planet import Planet
+import dill as pickle
 
-PLANETS = {'Dune' : Planet('Dune'), 'Hoth' : Planet('Hoth')}
-TASKS = {}
+from planet import Planet, Octant
+
+with open('gamestate.pickle', 'rb') as handle:
+    superlist = pickle.load(handle)
+
+planets = superlist[0]
+tasks = superlist[1]
+players = superlist[2]
 
 class DetailView(QtWidgets.QListWidget):
     '''The class for displaying lists of class objects
@@ -27,11 +33,13 @@ class DetailView(QtWidgets.QListWidget):
 
     def openMenu(self, position):
         #grab which class item is being requested
-        item = self.class_dict[self.selectedItems()[0].text()]
+        try:
+            item = self.class_dict[self.selectedItems()[0].text()]
+        except Exception as e:
+            print(e)
         #make the context menu
         menu = QtWidgets.QMenu()
         #get all the client methods of that class as a tuple of tuples
-        #
         item_methods = item.client_methods
         #add all the methods as QActions
         for method in item_methods:
@@ -56,7 +64,6 @@ class DetailView(QtWidgets.QListWidget):
         #implement the actions each option is linked to
         action = menu.exec_(self.mapToGlobal(position))
 
-
 class Ui_Halcyon(object):
 
     def setupUi(self, Halcyon):
@@ -65,13 +72,13 @@ class Ui_Halcyon(object):
         self.centralwidget = QtWidgets.QWidget(Halcyon)
         self.centralwidget.setObjectName("centralwidget")
         ##define planetview
-        self.PlanetView = DetailView(self.centralwidget, PLANETS, 2)
+        self.PlanetView = DetailView(self.centralwidget, planets, 'placeholder')
         self.PlanetView.setGeometry(QtCore.QRect(10, 10, 225, 550))
         self.PlanetView.setObjectName("PlanetView")
         #add the "view octant in OctantView" option
         #self.PlanetView.
         ##define playerview
-        self.PlayerView = QtWidgets.QListWidget(self.centralwidget)
+        self.PlayerView = DetailView(self.centralwidget, players, 'placeholder')
         self.PlayerView.setGeometry(QtCore.QRect(965, 10, 225, 550))
         self.PlayerView.setObjectName("PlayerView")
         ##define the octant label that says 'OctantView'
@@ -136,7 +143,8 @@ if __name__ == "__main__":
     ui = Ui_Halcyon()
     ui.setupUi(Halcyon)
     ####add custom code between here####
-    ui.PlanetView.addItems(list(PLANETS.keys()))
+    ui.PlanetView.addItems(list(planets.keys()))
+    ui.PlayerView.addItems(list(players.keys()))
     ####add custome code above here####
     Halcyon.show()
     sys.exit(app.exec_())

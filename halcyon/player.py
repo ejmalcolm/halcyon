@@ -1,12 +1,10 @@
-import weakref
-
 class Player():
 
     instances = []
 
     def __init__(self, name, slaved=False):
         #add self to instances for gamestate purposes
-        self.__class__.instances.append(weakref.proxy(self))
+        self.__class__.instances.append(self)
         self.name = name
         #if applicable, the player who has control over this player's actions
         self.slaved = slaved
