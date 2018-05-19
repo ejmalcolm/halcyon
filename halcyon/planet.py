@@ -1,5 +1,5 @@
 import random
-from collections import Counter
+from collections import Counter, namedtuple
 
 # A planet has eight octants: NW, N, NE, E, SE, S, SW, W
 # Each octant has a biome type: aquatic, desert, forest, grassland, tundra, hills
@@ -90,16 +90,18 @@ class Planet():
             octants[direction] = Octant(name=direction, planet=self)
         self.octants = octants
         #set the usable methods for the GUI
-        self.client_methods = {'Get description' : self.get_description,
-                                'Get octant biome' : self.get_octant_biome
-                                }
+        ClientMethod = namedtuple('ClientMethod', ['Name', 'Function', 'Parameters'])
+        ClientMethod.__new__.__defaults__ = (None, None, [])
+        first_method = ClientMethod('Get description', self.get_description)
+        second_method = ClientMethod('Get octant biome', self.get_octant_biome, CARDINAL_DIRECTIONS)
+        self.client_methods = (first_method, second_method)
 
     def __str__(self):
         return 'a planet named %s' % self.name
 
     def get_octant_biome(self, octant_name):
         octant = self.octants[octant_name]
-        return octant.biome
+        return 'The %s octant is a %s biome' % (octant_name, octant.biome)
 
     def get_description(self):
         '''Generates a description of the planet based on the most common biome'''

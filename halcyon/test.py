@@ -6,19 +6,26 @@ import tags
 import player
 import task
 import inspect
+from collections import namedtuple
 
-Dune = planet.Planet('Arrakis', 5, 5)
+# Dune = planet.Planet('Arrakis', 5, 5)
+#
+# ##dont delete above this plzty
+#
+# bldng = building.Building('Wood Craft Factory', Dune, Dune.octants['North'], ['Refinery: Stone', 'Factory: Wood Crafts'], player.GM)
+#
+# spcshp = vehicle.SpaceShip('Halcyon', Dune, Dune.octants['North'], 100000)
+#
+# crtr = creature.Creature('a', Dune, Dune.octants['North'], 0, 1)
+#
+# labor = creature.Laborer('bob', Dune, Dune.octants['North'], build_rate=5, player=player.GM)
+#
+# bplan = building.Building_Plan('buh', Dune, Dune.octants['North'], ['Wood', 'Metal'], player.GM)
 
-##dont delete above this plzty
+ClientMethod = namedtuple('ClientMethod', ['Name', 'Function', 'Parameters'])
+ClientMethod.__new__.__defaults__ = (None, None, [])
 
-bldng = building.Building('Wood Craft Factory', Dune, Dune.octants['North'], ['Refinery: Stone', 'Factory: Wood Crafts'], player.GM)
+testlist = [1, 2, 3]
 
-spcshp = vehicle.SpaceShip('Halcyon', Dune, Dune.octants['North'], 100000)
-
-crtr = creature.Creature('a', Dune, Dune.octants['North'], 0, 1)
-
-labor = creature.Laborer('bob', Dune, Dune.octants['North'], build_rate=5, player=player.GM)
-
-bplan = building.Building_Plan('buh', Dune, Dune.octants['North'], ['Wood', 'Metal'], player.GM)
-
-print(inspect.getmembers(Dune, predicate=inspect.ismethod))
+z = [x for x in testlist]
+print(z)
