@@ -1,4 +1,5 @@
 import random
+import weakref
 from collections import Counter, namedtuple
 
 # A planet has eight octants: NW, N, NE, E, SE, S, SW, W
@@ -80,21 +81,22 @@ class Octant():
 
 class Planet():
 
-    def __init__(self, name, x, y):
-        #The x and y position in the solar system.
-        self.x_pos = x
-        self.y_pos = y
+    instances = []
+
+    def __init__(self, name):
+        #add self to instances for gamestate purposes
+        self.__class__.instances.append(weakref.proxy(self))
+        #rest of init
         self.name = name
         octants = {}
         for direction in CARDINAL_DIRECTIONS:
             octants[direction] = Octant(name=direction, planet=self)
         self.octants = octants
         #set the usable methods for the GUI
-        ClientMethod = namedtuple('ClientMethod', ['Name', 'Function', 'Parameters'])
-        ClientMethod.__new__.__defaults__ = (None, None, [])
-        first_method = ClientMethod('Get description', self.get_description)
-        second_method = ClientMethod('Get octant biome', self.get_octant_biome, CARDINAL_DIRECTIONS)
-        self.client_methods = (first_method, second_method)
+        self.client_methods = (
+                                ('Get description', self.get_description, None),
+                                ('Get octant biome', self.get_octant_biome, CARDINAL_DIRECTIONS)
+        )
 
     def __str__(self):
         return 'a planet named %s' % self.name

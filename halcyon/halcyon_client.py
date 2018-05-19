@@ -8,11 +8,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-import inspect
-
 from planet import Planet
 
-PLANETS = {'Dune' : Planet('Dune', 1, 2), 'Hoth' : Planet('Hoth', 2, 4)}
+PLANETS = {'Dune' : Planet('Dune'), 'Hoth' : Planet('Hoth')}
 TASKS = {}
 
 class DetailView(QtWidgets.QListWidget):
@@ -32,8 +30,8 @@ class DetailView(QtWidgets.QListWidget):
         item = self.class_dict[self.selectedItems()[0].text()]
         #make the context menu
         menu = QtWidgets.QMenu()
-        #get all the client methods of that class as a dictionary
-        #dictionary is in the form {'Method name' : method_object}
+        #get all the client methods of that class as a tuple of tuples
+        #
         item_methods = item.client_methods
         #add all the methods as QActions
         for method in item_methods:

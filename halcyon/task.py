@@ -1,4 +1,5 @@
 from time import time, sleep
+import weakref
 
 ACTIVE_TASKS = []
 
@@ -15,7 +16,11 @@ def task_loop():
 
 class Task():
 
+    instances = []
+
     def __init__(self, hours_needed, end_func, player, arguments=[], result=''):
+        #add self to instances for gamestate purposes
+        self.__class__.instances.append(weakref.proxy(self))
         #calculates the end_time and saves it as an attribute
         #time() gets a relative number of seconds since the epoch
         #then, the number of hours (time_needed) is converted to seconds

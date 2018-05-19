@@ -1,6 +1,5 @@
 from importlib import import_module
 from tags import add_tags
-from player import GM
 
 class Object():
 
