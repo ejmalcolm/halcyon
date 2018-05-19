@@ -32,11 +32,12 @@ class DetailView(QtWidgets.QListWidget):
         self.customContextMenuRequested.connect(self.openMenu)
 
     def openMenu(self, position):
-        #grab which class item is being requested
+        #grab which class item is being requested by selection
         try:
             item = self.class_dict[self.selectedItems()[0].text()]
+        #if there's nothing selected, set the default to the first item
         except Exception as e:
-            print(e)
+            item = self.class_dict[self.item(0).text()]
         #make the context menu
         menu = QtWidgets.QMenu()
         #get all the client methods of that class as a tuple of tuples
@@ -98,6 +99,7 @@ class Ui_Halcyon(object):
         self.AlertView.setReadOnly(True)
         self.AlertView.setGeometry(QtCore.QRect(10, 570, 581, 121))
         self.AlertView.setObjectName("AlertView")
+        self.AlertView.setFontPointSize(20)
         ##define the task queue that shows all tasks
         self.TaskQueue = QtWidgets.QListWidget(self.centralwidget)
         self.TaskQueue.setGeometry(QtCore.QRect(610, 570, 581, 121))
