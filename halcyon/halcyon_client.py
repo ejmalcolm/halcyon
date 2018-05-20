@@ -1,23 +1,20 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'halcyon_client.ui'
-#
-# Created by: PyQt5 UI code generator 5.10.1
-#
-# WARNING! All changes made in this file will be lost!
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import dill as pickle
 
 from planet import Planet, Octant
 
-with open('gamestate.pickle', 'rb') as handle:
-    superlist = pickle.load(handle)
+def get_gamestate():
+    global planets
+    global tasks
+    global players
+    with open('gamestate.pickle', 'rb') as handle:
+        superlist = pickle.load(handle)
+    planets = superlist[0]
+    tasks = superlist[1]
+    players = superlist[2]
 
-planets = superlist[0]
-tasks = superlist[1]
-players = superlist[2]
+get_gamestate()
 
 class DetailView(QtWidgets.QListWidget):
     '''The class for displaying lists of class objects
@@ -65,6 +62,17 @@ class DetailView(QtWidgets.QListWidget):
         #implement the actions each option is linked to
         action = menu.exec_(self.mapToGlobal(position))
 
+class OctantView(QtWidgets.QListWidget):
+
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.current_octant = None
+
+    def view_octant(self, octant):
+        self.clear()
+        contents = [str(occupant) for occupant in octant.contents]
+        self.addItems(contents)
+
 class Ui_Halcyon(object):
 
     def setupUi(self, Halcyon):
@@ -91,7 +99,7 @@ class Ui_Halcyon(object):
         self.OctantLabel.setIndent(-1)
         self.OctantLabel.setObjectName("OctantLabel")
         ##define the central large octant view
-        self.OctantView = QtWidgets.QListWidget(self.centralwidget)
+        self.OctantView = OctantView(self.centralwidget)
         self.OctantView.setGeometry(QtCore.QRect(250, 40, 701, 521))
         self.OctantView.setObjectName("OctantView")
         ##define the alert view for messages/alerts
@@ -101,7 +109,7 @@ class Ui_Halcyon(object):
         self.AlertView.setObjectName("AlertView")
         self.AlertView.setFontPointSize(20)
         ##define the task queue that shows all tasks
-        self.TaskQueue = QtWidgets.QListWidget(self.centralwidget)
+        self.TaskQueue = DetailView(self.centralwidget, tasks, 'placeholder')
         self.TaskQueue.setGeometry(QtCore.QRect(610, 570, 581, 121))
         self.TaskQueue.setObjectName("TaskQueue")
 
@@ -147,6 +155,8 @@ if __name__ == "__main__":
     ####add custom code between here####
     ui.PlanetView.addItems(list(planets.keys()))
     ui.PlayerView.addItems(list(players.keys()))
+    ui.TaskQueue.addItems(list(tasks.keys()))
+    ui.OctantView.view_octant(planets['Dune'].octants['North'])
     ####add custome code above here####
     Halcyon.show()
     sys.exit(app.exec_())

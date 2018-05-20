@@ -25,7 +25,5 @@ from collections import namedtuple
 ClientMethod = namedtuple('ClientMethod', ['Name', 'Function', 'Parameters'])
 ClientMethod.__new__.__defaults__ = (None, None, [])
 
-testlist = [1, 2, 3]
-
-z = [x for x in testlist]
-print(z)
+z = {1 : 1, 2: 2, 3 : 3}
+print(list(z.keys()))
