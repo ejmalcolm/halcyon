@@ -13,8 +13,8 @@ class Player():
         #the resources that this player has access to
         self.resources = []
         self.client_methods = (
-                                ('Display resources', self.get_resources, None),
-                                ('Display description', self.__str__, None)
+                                ('Display resources', self.get_resources, None, False),
+                                ('Display description', self.__str__, None, False)
         )
 
     def __str__(self):

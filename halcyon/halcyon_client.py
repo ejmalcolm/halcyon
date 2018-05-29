@@ -2,8 +2,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import dill as pickle
 
-from planet import Planet, Octant
-
 def get_gamestate():
     global planets
     global tasks
@@ -14,7 +12,10 @@ def get_gamestate():
     tasks = superlist[1]
     players = superlist[2]
 
-get_gamestate()
+def get_planet_octant(planet, octant_name):
+    plan_object = planets[planet]
+    oct_object = plan_object.octants[octant_name]
+    return [plan_object, oct_object]
 
 class DetailView(QtWidgets.QListWidget):
     '''The class for displaying lists of class objects
@@ -26,9 +27,9 @@ class DetailView(QtWidgets.QListWidget):
         self.class_dict = class_dict
         self.player = player
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        self.customContextMenuRequested.connect(self.openMenu)
+        self.customContextMenuRequested.connect(self.openMenuFunction)
 
-    def openMenu(self, position):
+    def openMenuFunction(self, position):
         #grab which class item is being requested by selection
         try:
             item = self.class_dict[self.selectedItems()[0].text()]
@@ -68,10 +69,31 @@ class OctantView(QtWidgets.QListWidget):
         super().__init__(parent)
         self.current_octant = None
 
-    def view_octant(self, octant):
+    def view_octant(self, planet_str, octant_str):
         self.clear()
         contents = [str(occupant) for occupant in octant.contents]
         self.addItems(contents)
+
+class PlanetDialog(QtWidgets.QDialog):
+
+    def __init__(self):
+        super().__init__()
+        dialog = QtWidgets.QDialog(Halcyon)
+        dialog.setGeometry(QtCore.QRect(500, 500, 200, 200))
+        self.planet_display = QtWidgets.QComboBox(dialog)
+        self.planet_display.setGeometry(QtCore.QRect(0, 0, 200, 20))
+        self.planet_display.addItems(planets)
+
+        self.octant_display = QtWidgets.QComboBox(dialog)
+        self.octant_display.setGeometry(QtCore.QRect(0, 50, 200, 20))
+        self.octant_display.addItems(['North', 'Northeast', 'East', 'Southeast', 'South', 'Southwest', 'West', 'Northwest'])
+
+        self.select_button = QtWidgets.QPushButton(dialog)
+        self.select_button.setGeometry(QtCore.QRect(50, 115, 100, 30))
+        self.select_button.setText('Display Octant')
+        self.select_button.clicked.connect(buhbuh)
+
+        dialog.show()
 
 class Ui_Halcyon(object):
 
@@ -90,14 +112,12 @@ class Ui_Halcyon(object):
         self.PlayerView = DetailView(self.centralwidget, players, 'placeholder')
         self.PlayerView.setGeometry(QtCore.QRect(965, 10, 225, 550))
         self.PlayerView.setObjectName("PlayerView")
-        ##define the octant label that says 'OctantView'
-        self.OctantLabel = QtWidgets.QLabel(self.centralwidget)
-        self.OctantLabel.setGeometry(QtCore.QRect(470, 0, 211, 31))
-        self.OctantLabel.setStyleSheet("font: 24pt \"Sitka\";")
-        self.OctantLabel.setTextFormat(QtCore.Qt.AutoText)
-        self.OctantLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.OctantLabel.setIndent(-1)
-        self.OctantLabel.setObjectName("OctantLabel")
+        ##define the octant selector that controls the octantview
+        self.OctantSelect = QtWidgets.QPushButton(self.centralwidget)
+        self.OctantSelect.clicked.connect(PlanetDialog)
+        self.OctantSelect.setGeometry(QtCore.QRect(470, 0, 211, 31))
+        self.OctantSelect.setStyleSheet("font: 15pt \"Sitka\";")
+        self.OctantSelect.setObjectName("OctantSelect")
         ##define the central large octant view
         self.OctantView = OctantView(self.centralwidget)
         self.OctantView.setGeometry(QtCore.QRect(250, 40, 701, 521))
@@ -114,16 +134,6 @@ class Ui_Halcyon(object):
         self.TaskQueue.setObjectName("TaskQueue")
 
         Halcyon.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(Halcyon)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1200, 21))
-        self.menubar.setObjectName("menubar")
-        self.menutewst = QtWidgets.QMenu(self.menubar)
-        self.menutewst.setObjectName("menutewst")
-        Halcyon.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(Halcyon)
-        self.statusbar.setObjectName("statusbar")
-        Halcyon.setStatusBar(self.statusbar)
-        self.menubar.addAction(self.menutewst.menuAction())
 
         self.retranslateUi(Halcyon)
         QtCore.QMetaObject.connectSlotsByName(Halcyon)
@@ -131,8 +141,7 @@ class Ui_Halcyon(object):
     def retranslateUi(self, Halcyon):
         _translate = QtCore.QCoreApplication.translate
         Halcyon.setWindowTitle(_translate("Halcyon", "Halcyon -- Client"))
-        self.OctantLabel.setText(_translate("Halcyon", "Octant View"))
-        self.menutewst.setTitle(_translate("Halcyon", "Menu"))
+        self.OctantSelect.setText(_translate("Halcyon", "Select Octant"))
 
     def display_alert(self, alert_action):
         '''Sets the AlertView to show the results of the alert_actionself.
@@ -148,6 +157,7 @@ class Ui_Halcyon(object):
 
 if __name__ == "__main__":
     import sys
+    get_gamestate()
     app = QtWidgets.QApplication(sys.argv)
     Halcyon = QtWidgets.QMainWindow()
     ui = Ui_Halcyon()
@@ -156,7 +166,6 @@ if __name__ == "__main__":
     ui.PlanetView.addItems(list(planets.keys()))
     ui.PlayerView.addItems(list(players.keys()))
     ui.TaskQueue.addItems(list(tasks.keys()))
-    ui.OctantView.view_octant(planets['Dune'].octants['North'])
     ####add custome code above here####
     Halcyon.show()
     sys.exit(app.exec_())

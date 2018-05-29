@@ -92,9 +92,10 @@ class Planet():
             octants[direction] = Octant(name=direction, planet=self)
         self.octants = octants
         #set the usable methods for the GUI
+        #name, function pointer, parameter dictionary, if it causes a statechange
         self.client_methods = (
-                                ('Get description', self.get_description, None),
-                                ('Get octant biome', self.get_octant_biome, CARDINAL_DIRECTIONS)
+                                ('Display description', self.get_description, None, False),
+                                ('Display octant biome', self.get_octant_biome, CARDINAL_DIRECTIONS, False)
         )
 
     def __str__(self):
