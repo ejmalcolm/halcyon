@@ -12,11 +12,6 @@ def get_gamestate():
     tasks = superlist[1]
     players = superlist[2]
 
-def get_planet_octant(planet, octant_name):
-    plan_object = planets[planet]
-    oct_object = plan_object.octants[octant_name]
-    return [plan_object, oct_object]
-
 class DetailView(QtWidgets.QListWidget):
     '''The class for displaying lists of class objects
     Includes context menus for each class object displayed
@@ -45,6 +40,7 @@ class DetailView(QtWidgets.QListWidget):
             method_text = method[0]
             method_function = method[1]
             method_parameters = method[2]
+            method_statechange = method[3]
             if method_parameters:
                 #add a an additional menu to the main menu
                 parameterMenu = menu.addMenu(method_text)
@@ -53,11 +49,13 @@ class DetailView(QtWidgets.QListWidget):
                     parameterAction = parameterMenu.addAction(parameter)
                     parameterAction.bound_function = method_function
                     parameterAction.bound_parameter = parameter
+                parameterAction.statechange = method_statechange
             else:
                 baseAction = menu.addAction(method_text)
                 baseAction.bound_function = method_function
                 #set parameter to None so it can be checked later
                 baseAction.bound_parameter = None
+                baseAction.statechange = method_statechange
         #connect each to the display_alert function so that the output is shown
         menu.triggered.connect(ui.display_alert)
         #implement the actions each option is linked to
@@ -69,14 +67,14 @@ class OctantView(QtWidgets.QListWidget):
         super().__init__(parent)
         self.current_octant = None
 
-    def view_octant(self, planet_str, octant_str):
+    def viewOctant(self, octant_obj):
         self.clear()
-        contents = [str(occupant) for occupant in octant.contents]
+        contents = [str(occupant) for occupant in octant_obj.contents]
         self.addItems(contents)
 
 class PlanetDialog(QtWidgets.QDialog):
 
-    def __init__(self):
+    def __init__(self, octant_view):
         super().__init__()
         dialog = QtWidgets.QDialog(Halcyon)
         dialog.setGeometry(QtCore.QRect(500, 500, 200, 200))
@@ -91,9 +89,17 @@ class PlanetDialog(QtWidgets.QDialog):
         self.select_button = QtWidgets.QPushButton(dialog)
         self.select_button.setGeometry(QtCore.QRect(50, 115, 100, 30))
         self.select_button.setText('Display Octant')
-        self.select_button.clicked.connect(buhbuh)
-
+        self.select_button.clicked.connect(lambda x: self.changeView(x))
         dialog.show()
+
+    def changeView(self, bool):
+        self.octant_view = ui.OctantView
+        planet_str = self.planet_display.currentText()
+        octant_str = self.octant_display.currentText()
+        planet = planets[planet_str]
+        octant = planet.octants[octant_str]
+        self.octant_view.viewOctant(octant)
+
 
 class Ui_Halcyon(object):
 
@@ -107,7 +113,6 @@ class Ui_Halcyon(object):
         self.PlanetView.setGeometry(QtCore.QRect(10, 10, 225, 550))
         self.PlanetView.setObjectName("PlanetView")
         #add the "view octant in OctantView" option
-        #self.PlanetView.
         ##define playerview
         self.PlayerView = DetailView(self.centralwidget, players, 'placeholder')
         self.PlayerView.setGeometry(QtCore.QRect(965, 10, 225, 550))
