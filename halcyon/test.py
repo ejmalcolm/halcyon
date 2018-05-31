@@ -22,6 +22,14 @@ from collections import namedtuple
 #
 # bplan = building.Building_Plan('buh', Dune, Dune.octants['North'], ['Wood', 'Metal'], player.GM)
 
-item_dict = {'a' : 'buh'}
-for item in item_dict:
-    print(item)
+class Abc():
+
+    def __init__(self):
+        self.name = 'bob'
+
+{'Alpha': <creature.Automaton object at 0x033B27B0>}
+
+item_list = [[1, 2]]
+
+testdict = {k: v for k, v in item_list}
+print(testdict)

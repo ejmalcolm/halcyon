@@ -19,7 +19,7 @@ class Laborer(Creature):
         self.harvest_rate = harvest_rate
         self.build_rate = build_rate
         self.client_methods = (
-                            ('Harvest Resource', self.harvest_resource, self.octant.resources, True)
+                            ('Harvest Resource', self.harvest_resource, self.octant.resources, True),
                                 )
 
     def __str__(self):

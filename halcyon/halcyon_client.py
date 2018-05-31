@@ -46,7 +46,6 @@ class DetailView(QtWidgets.QListWidget):
             method_function = method[1]
             method_parameters = method[2]
             method_statechange = method[3]
-            print(method[3])
             if method_parameters:
                 #add a an additional menu to the main menu
                 parameterMenu = menu.addMenu(method_text)
@@ -55,7 +54,7 @@ class DetailView(QtWidgets.QListWidget):
                     parameterAction = parameterMenu.addAction(parameter)
                     parameterAction.bound_function = method_function
                     parameterAction.bound_parameter = parameter
-                parameterAction.statechange = method_statechange
+                    parameterAction.statechange = method_statechange
             else:
                 baseAction = menu.addAction(method_text)
                 baseAction.bound_function = method_function
@@ -76,20 +75,55 @@ class OctantView(QtWidgets.QListWidget):
         self.customContextMenuRequested.connect(self.open_menu)
 
     def open_menu(self, position):
-        if self.current_octant == None:
-            return None
         #grab which class item is being requested by selection
         try:
-            item = self.class_dict[self.selectedItems()[0].text()]
+            item = self.selectedItems()[0].class_obj
         #if there's nothing selected, set the default to the first item
         except Exception as e:
-            item = self.class_dict[self.item(0).text()]
+            item = self.item(0).class_obj
+        #make the context menu
+        menu = QtWidgets.QMenu()
+        #get all the client methods of that class as a tuple of tuples
+        item_methods = item.client_methods
+        #add all the methods as QActions
+        for method in item_methods:
+            method_text = method[0]
+            method_function = method[1]
+            method_parameters = method[2]
+            method_statechange = method[3]
+            if method_parameters:
+                #add a an additional menu to the main menu
+                parameterMenu = menu.addMenu(method_text)
+                #to the secondary menu, add the parameters as actions
+                for parameter in method_parameters:
+                    parameterAction = parameterMenu.addAction(parameter)
+                    parameterAction.bound_function = method_function
+                    parameterAction.bound_parameter = parameter
+                    parameterAction.statechange = method_statechange
+            else:
+                baseAction = menu.addAction(method_text)
+                baseAction.bound_function = method_function
+                #set parameter to None so it can be checked later
+                baseAction.bound_parameter = None
+                baseAction.statechange = method_statechange
+        #connect each to the display_alert function so that the output is shown
+        menu.triggered.connect(ui.cause_action)
+        #implement the actions each option is linked to
+        action = menu.exec_(self.mapToGlobal(position))
+
+    def add_class_items(self, item_dict):
+        for item_name in item_dict:
+            qt_item_widget = QtWidgets.QListWidgetItem(item_name)
+            self.addItem(qt_item_widget)
+            qt_item_widget.class_obj = item_dict[item_name]
 
     def view_octant(self, octant_obj):
         self.clear()
         self.current_octant = octant_obj
-        contents = [str(occupant) for occupant in octant_obj.contents]
-        self.addItems(contents)
+        contents = octant_obj.contents
+        names = [str(obj) for obj in contents]
+        name_object_dict = {key: value for key, value in zip(names, contents)}
+        self.add_class_items(name_object_dict)
 
 class PlanetDialog(QtWidgets.QDialog):
 
@@ -175,17 +209,19 @@ class Ui_Halcyon(object):
         '''
         statechange_prefix = 'This action will be launched at the next half-hour mark: '
         if action.bound_parameter and not action.statechange:
-            print(1)
             self.AlertView.setHtml(action.bound_function(action.bound_parameter))
         elif not action.bound_parameter and not action.statechange:
-            print(2)
             self.AlertView.setHtml(action.bound_function())
         elif action.bound_parameter and action.statechange:
-            print(3)
-            self.AlertView.setHtml(action.bound_function(action.bound_parameter) + statechange_prefix)
+            print(action.bound_function)
+            print(action.bound_parameter)
+            try:
+                print(action.bound_function(action.bound_parameter))
+            except Exception as e:
+                print(e)
+            self.AlertView.setHtml(statechange_prefix + action.bound_function(action.bound_parameter))
             #ActionDock.dock_action(action)
         elif not action.bound_parameter and action.statechange:
-            print(4)
             self.AlertView.setHtml(action.bound_function())
             #ActionDock.dock_action(action)
 
@@ -198,8 +234,8 @@ if __name__ == "__main__":
     ui.setupUi(Halcyon)
     ####add custom code between here####
     ui.PlanetView.add_class_items(planets)
-    #ui.PlayerView.addItems(list(players.keys()))
-    #ui.TaskView.addItems(list(tasks.keys()))
+    ui.PlayerView.add_class_items(players)
+    ui.TaskView.add_class_items(tasks)
     ####add custome code above here####
     Halcyon.show()
     sys.exit(app.exec_())
