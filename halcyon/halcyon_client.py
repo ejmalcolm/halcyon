@@ -22,9 +22,9 @@ class DetailView(QtWidgets.QListWidget):
         self.class_dict = class_dict
         self.player = player
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        self.customContextMenuRequested.connect(self.openMenuFunction)
+        self.customContextMenuRequested.connect(self.open_menu)
 
-    def openMenuFunction(self, position):
+    def open_menu(self, position):
         #grab which class item is being requested by selection
         try:
             item = self.class_dict[self.selectedItems()[0].text()]
@@ -57,7 +57,7 @@ class DetailView(QtWidgets.QListWidget):
                 baseAction.bound_parameter = None
                 baseAction.statechange = method_statechange
         #connect each to the display_alert function so that the output is shown
-        menu.triggered.connect(ui.display_alert)
+        menu.triggered.connect(ui.cause_action)
         #implement the actions each option is linked to
         action = menu.exec_(self.mapToGlobal(position))
 
@@ -67,7 +67,7 @@ class OctantView(QtWidgets.QListWidget):
         super().__init__(parent)
         self.current_octant = None
 
-    def viewOctant(self, octant_obj):
+    def view_octant(self, octant_obj):
         self.clear()
         contents = [str(occupant) for occupant in octant_obj.contents]
         self.addItems(contents)
@@ -89,16 +89,16 @@ class PlanetDialog(QtWidgets.QDialog):
         self.select_button = QtWidgets.QPushButton(dialog)
         self.select_button.setGeometry(QtCore.QRect(50, 115, 100, 30))
         self.select_button.setText('Display Octant')
-        self.select_button.clicked.connect(lambda x: self.changeView(x))
+        self.select_button.clicked.connect(lambda x: self.change_view(x))
         dialog.show()
 
-    def changeView(self, bool):
+    def change_view(self, bool):
         self.octant_view = ui.OctantView
         planet_str = self.planet_display.currentText()
         octant_str = self.octant_display.currentText()
         planet = planets[planet_str]
         octant = planet.octants[octant_str]
-        self.octant_view.viewOctant(octant)
+        self.octant_view.view_octant(octant)
 
 
 class Ui_Halcyon(object):
@@ -134,9 +134,9 @@ class Ui_Halcyon(object):
         self.AlertView.setObjectName("AlertView")
         self.AlertView.setFontPointSize(20)
         ##define the task queue that shows all tasks
-        self.TaskQueue = DetailView(self.centralwidget, tasks, 'placeholder')
-        self.TaskQueue.setGeometry(QtCore.QRect(610, 570, 581, 121))
-        self.TaskQueue.setObjectName("TaskQueue")
+        self.TaskView = DetailView(self.centralwidget, tasks, 'placeholder')
+        self.TaskView.setGeometry(QtCore.QRect(610, 570, 581, 121))
+        self.TaskView.setObjectName("TaskView")
 
         Halcyon.setCentralWidget(self.centralwidget)
 
@@ -148,17 +148,24 @@ class Ui_Halcyon(object):
         Halcyon.setWindowTitle(_translate("Halcyon", "Halcyon -- Client"))
         self.OctantSelect.setText(_translate("Halcyon", "Select Octant"))
 
-    def display_alert(self, alert_action):
+    def cause_action(self, action):
         '''Sets the AlertView to show the results of the alert_actionself.
         If there is a .bound_parameter to the alert_action:
         pass the bound_function with the parameter
         Else, just pass the bound_function naked
         Either way, set Alertview to display the result
         '''
-        if alert_action.bound_parameter:
-            self.AlertView.setHtml(alert_action.bound_function(alert_action.bound_parameter))
-        else:
-            self.AlertView.setHtml(alert_action.bound_function())
+        statechange_prefix = 'This action will be launched at the next half-hour mark: '
+        if action.bound_parameter and not action.statechange:
+            self.AlertView.setHtml(action.bound_function(action.bound_parameter))
+        elif action.bound_parameter and not action.statechange:
+            self.AlertView.setHtml(action.bound_function())
+        elif action.bound_parameter and action.statechange:
+            self.AlertView.setHtml(action.bound_function(action.bound_parameter) + statechange_prefix)
+            #ActionDock.dock_action(action)
+        elif not action.bound_parameter and not action.statechange:
+            self.AlertView.setHtml(action.bound_function() + statechange_prefix)
+            #ActionDock.dock_action(action)
 
 if __name__ == "__main__":
     import sys
@@ -170,7 +177,7 @@ if __name__ == "__main__":
     ####add custom code between here####
     ui.PlanetView.addItems(list(planets.keys()))
     ui.PlayerView.addItems(list(players.keys()))
-    ui.TaskQueue.addItems(list(tasks.keys()))
+    ui.TaskView.addItems(list(tasks.keys()))
     ####add custome code above here####
     Halcyon.show()
     sys.exit(app.exec_())
