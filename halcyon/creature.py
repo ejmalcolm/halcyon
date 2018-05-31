@@ -18,6 +18,9 @@ class Laborer(Creature):
         super().__init__(name, on_planet, in_octant, player, move=1/5)
         self.harvest_rate = harvest_rate
         self.build_rate = build_rate
+        self.client_methods = (
+                            ('Harvest Resource', self.harvest_resource, self.octant.resources, True)
+                                )
 
     def __str__(self):
         return 'Laborer named %s' % self.name
@@ -81,5 +84,5 @@ class Artist(CrewMember):
 class Automaton(Laborer):
 
     def __init__(self, name, on_planet, in_octant, player):
-        super().__init__(name, on_planet, in_octant, harvest_rate=1/6, build_rate=1/3)
+        super().__init__(name, on_planet, in_octant, player, harvest_rate=1/6, build_rate=1/3)
         add_tags(self, ['Metal'])

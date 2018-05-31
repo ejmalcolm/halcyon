@@ -22,8 +22,6 @@ from collections import namedtuple
 #
 # bplan = building.Building_Plan('buh', Dune, Dune.octants['North'], ['Wood', 'Metal'], player.GM)
 
-ClientMethod = namedtuple('ClientMethod', ['Name', 'Function', 'Parameters'])
-ClientMethod.__new__.__defaults__ = (None, None, [])
-
-z = {1 : 1, 2: 2, 3 : 3}
-print(list(z.keys()))
+item_dict = {'a' : 'buh'}
+for item in item_dict:
+    print(item)

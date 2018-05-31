@@ -17,20 +17,25 @@ class DetailView(QtWidgets.QListWidget):
     Includes context menus for each class object displayed
     '''
 
-    def __init__(self, parent, class_dict, player):
+    def __init__(self, parent, player):
         super().__init__(parent)
-        self.class_dict = class_dict
         self.player = player
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.open_menu)
 
+    def add_class_items(self, item_dict):
+        for item_name in item_dict:
+            qt_item_widget = QtWidgets.QListWidgetItem(item_name)
+            self.addItem(qt_item_widget)
+            qt_item_widget.class_obj = item_dict[item_name]
+
     def open_menu(self, position):
         #grab which class item is being requested by selection
         try:
-            item = self.class_dict[self.selectedItems()[0].text()]
+            item = self.selectedItems()[0].class_obj
         #if there's nothing selected, set the default to the first item
         except Exception as e:
-            item = self.class_dict[self.item(0).text()]
+            item = self.item(0).class_obj
         #make the context menu
         menu = QtWidgets.QMenu()
         #get all the client methods of that class as a tuple of tuples
@@ -41,6 +46,7 @@ class DetailView(QtWidgets.QListWidget):
             method_function = method[1]
             method_parameters = method[2]
             method_statechange = method[3]
+            print(method[3])
             if method_parameters:
                 #add a an additional menu to the main menu
                 parameterMenu = menu.addMenu(method_text)
@@ -66,9 +72,22 @@ class OctantView(QtWidgets.QListWidget):
     def __init__(self, parent):
         super().__init__(parent)
         self.current_octant = None
+        self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.open_menu)
+
+    def open_menu(self, position):
+        if self.current_octant == None:
+            return None
+        #grab which class item is being requested by selection
+        try:
+            item = self.class_dict[self.selectedItems()[0].text()]
+        #if there's nothing selected, set the default to the first item
+        except Exception as e:
+            item = self.class_dict[self.item(0).text()]
 
     def view_octant(self, octant_obj):
         self.clear()
+        self.current_octant = octant_obj
         contents = [str(occupant) for occupant in octant_obj.contents]
         self.addItems(contents)
 
@@ -100,7 +119,6 @@ class PlanetDialog(QtWidgets.QDialog):
         octant = planet.octants[octant_str]
         self.octant_view.view_octant(octant)
 
-
 class Ui_Halcyon(object):
 
     def setupUi(self, Halcyon):
@@ -109,12 +127,12 @@ class Ui_Halcyon(object):
         self.centralwidget = QtWidgets.QWidget(Halcyon)
         self.centralwidget.setObjectName("centralwidget")
         ##define planetview
-        self.PlanetView = DetailView(self.centralwidget, planets, 'placeholder')
+        self.PlanetView = DetailView(self.centralwidget, 'placeholder')
         self.PlanetView.setGeometry(QtCore.QRect(10, 10, 225, 550))
         self.PlanetView.setObjectName("PlanetView")
         #add the "view octant in OctantView" option
         ##define playerview
-        self.PlayerView = DetailView(self.centralwidget, players, 'placeholder')
+        self.PlayerView = DetailView(self.centralwidget, 'placeholder')
         self.PlayerView.setGeometry(QtCore.QRect(965, 10, 225, 550))
         self.PlayerView.setObjectName("PlayerView")
         ##define the octant selector that controls the octantview
@@ -134,7 +152,7 @@ class Ui_Halcyon(object):
         self.AlertView.setObjectName("AlertView")
         self.AlertView.setFontPointSize(20)
         ##define the task queue that shows all tasks
-        self.TaskView = DetailView(self.centralwidget, tasks, 'placeholder')
+        self.TaskView = DetailView(self.centralwidget, 'placeholder')
         self.TaskView.setGeometry(QtCore.QRect(610, 570, 581, 121))
         self.TaskView.setObjectName("TaskView")
 
@@ -157,14 +175,18 @@ class Ui_Halcyon(object):
         '''
         statechange_prefix = 'This action will be launched at the next half-hour mark: '
         if action.bound_parameter and not action.statechange:
+            print(1)
             self.AlertView.setHtml(action.bound_function(action.bound_parameter))
-        elif action.bound_parameter and not action.statechange:
+        elif not action.bound_parameter and not action.statechange:
+            print(2)
             self.AlertView.setHtml(action.bound_function())
         elif action.bound_parameter and action.statechange:
+            print(3)
             self.AlertView.setHtml(action.bound_function(action.bound_parameter) + statechange_prefix)
             #ActionDock.dock_action(action)
-        elif not action.bound_parameter and not action.statechange:
-            self.AlertView.setHtml(action.bound_function() + statechange_prefix)
+        elif not action.bound_parameter and action.statechange:
+            print(4)
+            self.AlertView.setHtml(action.bound_function())
             #ActionDock.dock_action(action)
 
 if __name__ == "__main__":
@@ -175,9 +197,9 @@ if __name__ == "__main__":
     ui = Ui_Halcyon()
     ui.setupUi(Halcyon)
     ####add custom code between here####
-    ui.PlanetView.addItems(list(planets.keys()))
-    ui.PlayerView.addItems(list(players.keys()))
-    ui.TaskView.addItems(list(tasks.keys()))
+    ui.PlanetView.add_class_items(planets)
+    #ui.PlayerView.addItems(list(players.keys()))
+    #ui.TaskView.addItems(list(tasks.keys()))
     ####add custome code above here####
     Halcyon.show()
     sys.exit(app.exec_())
