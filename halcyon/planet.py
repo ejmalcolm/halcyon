@@ -1,5 +1,5 @@
 import random
-from collections import Counter, namedtuple
+from collections import Counter
 
 # A planet has eight octants: NW, N, NE, E, SE, S, SW, W
 # Each octant has a biome type: aquatic, desert, forest, grassland, tundra, hills

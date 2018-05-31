@@ -1,12 +1,12 @@
+from creature import Automaton
 from planet import Planet, Octant
 from task import ACTIVE_TASKS
 from player import Player
 import dill as pickle
 
-Space = Planet('Space')
-Space.octants = ['Void']
-
+##
 Dune = Planet('Dune')
+Dune.octants['North'].add_occupant()
 
 planets = {planet.name: planet for planet in Planet.instances}
 tasks = {str(task): task for task in ACTIVE_TASKS}
