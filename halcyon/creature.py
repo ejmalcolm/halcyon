@@ -20,6 +20,7 @@ class Laborer(Creature):
         self.build_rate = build_rate
         self.client_methods = (
                             ('Harvest Resource', self.harvest_resource, self.octant.resources, True),
+                            #('Construct Building', self.construct_building, self.octant.class_objects('BuildingPlan'), True)
                                 )
 
     def __str__(self):
@@ -58,7 +59,7 @@ class Laborer(Creature):
                                     result = '%s constructs %s' % (self, building_plan))
                 #report what's been done
                 return '%s is now constructing %s' % (self.name, building_plan)
-        return 'there is no unfinished %s in %s' % (building_plan, self.octant)
+        return '%s in %s is not constructable' % (building_plan, self.octant)
 
 class CrewMember(Laborer):
 

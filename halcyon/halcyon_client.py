@@ -213,16 +213,10 @@ class Ui_Halcyon(object):
         elif not action.bound_parameter and not action.statechange:
             self.AlertView.setHtml(action.bound_function())
         elif action.bound_parameter and action.statechange:
-            print(action.bound_function)
-            print(action.bound_parameter)
-            try:
-                print(action.bound_function(action.bound_parameter))
-            except Exception as e:
-                print(e)
             self.AlertView.setHtml(statechange_prefix + action.bound_function(action.bound_parameter))
             #ActionDock.dock_action(action)
         elif not action.bound_parameter and action.statechange:
-            self.AlertView.setHtml(action.bound_function())
+            self.AlertView.setHtml(statechange_prefix + action.bound_function())
             #ActionDock.dock_action(action)
 
 if __name__ == "__main__":
