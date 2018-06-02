@@ -1,5 +1,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+import pika
+import sys
+import time
 import dill as pickle
 
 def get_gamestate():
@@ -152,6 +155,30 @@ class PlanetDialog(QtWidgets.QDialog):
         planet = planets[planet_str]
         octant = planet.octants[octant_str]
         self.octant_view.view_octant(octant)
+
+class ActionDock():
+
+    def __init__(self):
+        self.dock = []
+
+    def dock_action(self, action):
+        #check validity?
+        self.dock.append(action)
+
+    def launch_action(self):
+        #need to launch the action to the rabbitmq queue
+        #first serializes the action with dill
+        #then sends the serialized text to the queue
+        #serialize the action dock
+        serialized_dock = pickle.dump(self.dock)
+        ##RabbitMQ queue##
+        connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+        channel = connection.channel()
+        channel.queue_declare(queue='ActionSea')
+        channel.basic_publish(exchange='', routing_key='ActionSea', body=serialized_dock)
+        print(serialized_dock)
+        connection.close()
+
 
 class Ui_Halcyon(object):
 
