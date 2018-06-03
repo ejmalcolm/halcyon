@@ -15,7 +15,7 @@ def callback(ch, method, properties, body):
     process_action_dock(body)
 
 channel.basic_consume(callback,
-                      queue='action ',
+                      queue='action',
                       no_ack=True)
 print(' [*] Waiting for messages. To exit press CTRL+C')
 

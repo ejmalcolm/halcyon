@@ -165,20 +165,24 @@ class ActionDock():
         #check validity?
         self.dock.append(action)
 
-    def launch_action(self):
+    def launch_actions(self):
         #need to launch the action to the rabbitmq queue
         #first serializes the action with dill
         #then sends the serialized text to the queue
         #serialize the action dock
-        serialized_dock = pickle.dump(self.dock)
+        try:
+            serialized_dock = pickle.dumps(self.dock)
+        except Exception as e:
+            print(e)
         ##RabbitMQ queue##
-        connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
         channel = connection.channel()
-        channel.queue_declare(queue='ActionSea')
-        channel.basic_publish(exchange='', routing_key='ActionSea', body=serialized_dock)
-        print(serialized_dock)
+        channel.queue_declare(queue='action')
+        channel.basic_publish(exchange='',
+                              routing_key='action',
+                              body=serialized_dock)
+        print("Sent serialized action dock to server")
         connection.close()
-
 
 class Ui_Halcyon(object):
 
@@ -212,6 +216,9 @@ class Ui_Halcyon(object):
         self.AlertView.setGeometry(QtCore.QRect(10, 570, 581, 121))
         self.AlertView.setObjectName("AlertView")
         self.AlertView.setFontPointSize(20)
+        ##define the ActionDock that runs in the background
+        ##manages sending actions to the server every 30 minutes
+        self.ActionDock = ActionDock()
         ##define the task queue that shows all tasks
         self.TaskView = DetailView(self.centralwidget, 'placeholder')
         self.TaskView.setGeometry(QtCore.QRect(610, 570, 581, 121))
@@ -241,10 +248,12 @@ class Ui_Halcyon(object):
             self.AlertView.setHtml(action.bound_function())
         elif action.bound_parameter and action.statechange:
             self.AlertView.setHtml(statechange_prefix + action.bound_function(action.bound_parameter))
-            #ActionDock.dock_action(action)
+            action_ship = (action.bound_function, action.bound_parameter)
+            self.ActionDock.dock_action(action_ship)
         elif not action.bound_parameter and action.statechange:
             self.AlertView.setHtml(statechange_prefix + action.bound_function())
-            #ActionDock.dock_action(action)
+            action_ship = (action.bound_function, action.bound_parameter)
+            self.ActionDock.dock_action(action_ship)
 
 if __name__ == "__main__":
     import sys
