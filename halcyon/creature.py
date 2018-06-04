@@ -8,6 +8,8 @@ class Creature(Object):
     def __init__(self, name, on_planet, in_octant, player, move):
         super().__init__(name, on_planet, in_octant, player)
         self.move = move
+        #used as a way to check if the creature is currently doing a task
+        self.busy = False
 
     def __str__(self):
         return 'Creature named %s' % self.name
@@ -28,6 +30,8 @@ class Laborer(Creature):
 
     def harvest_resource(self, resource):
         '''starts a Task() of harvesting the given resource if the resource is in the same octant'''
+        if self.busy:
+            return '%s is already occupied' % self.name
         #check if the resource is in the same octant
         if resource in self.octant.resources:
             #calculate the number of hours needed to finish the Task
@@ -37,13 +41,16 @@ class Laborer(Creature):
                 return 'harvesting rate of %s is zero' % self
             #start the Task()
             result = '%s gains 1 %s' % (self.player, resource)
-            harvest_task = Task(hours, self.player.gain_resource, self.player, resource, result)
+            harvest_task = Task(self, hours, self.player.gain_resource, self.player,
+                                arguments=[resource], result = 'Gain %s' % resource)
             #report what's been done
-            return '%s is now harvesting %s' % (self.name, resource)
+            return '%s harvests %s' % (self.name, resource)
         return 'there is no %s in %s' % (resource, self.octant)
 
     def construct_building(self, building_plan):
         '''starts a task of building the given plan if the plan is in the same octant'''
+        if self.busy:
+            return '%s is already occupied' % self.name
         if building_plan in self.octant.contents:
             #check if the needed resource is available
             resource_check = all(resources in building_plan.resource_needed for resources in self.player.resources)
@@ -54,11 +61,11 @@ class Laborer(Creature):
                 except:
                     return 'building rate of %s is zero' % self
                 #start the Task()
-                build_task = Task(hours, building_plan.work_on,
+                build_task = Task(self, hours, building_plan.work_on,
                                     self.player, arguments=[1],
                                     result = '%s constructs %s' % (self, building_plan))
                 #report what's been done
-                return '%s is now constructing %s' % (self.name, building_plan)
+                return '%s constructing %s' % (self.name, building_plan)
         return '%s in %s is not constructable' % (building_plan, self.octant)
 
 class CrewMember(Laborer):

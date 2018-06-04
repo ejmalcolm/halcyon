@@ -17,9 +17,13 @@ class Task():
 
     instances = []
 
-    def __init__(self, hours_needed, end_func, player, arguments=[], result=''):
+    def __init__(self, task_creator, hours_needed, end_func, player, arguments=[], result=''):
         #add self to instances for gamestate purposes
         self.__class__.instances.append(self)
+        #used as a way to check what creature is involved in making this task happen
+        #used for busy checks
+        self.task_creator = task_creator
+        self.task_creator.busy = True
         #calculates the end_time and saves it as an attribute
         #time() gets a relative number of seconds since the epoch
         #then, the number of hours (time_needed) is converted to seconds
@@ -38,9 +42,9 @@ class Task():
     def check_progress(self):
         #if the end time has passed, call end_func())
         if self.end_time <= time():
-            print('The task was finished.')
             self.end_func(*self.arguments)
-            return True
+            self.busy = False
+            return '%s was finished.' % self.result
         #otherwise, report the hours/minutes left until its done
         seconds_left = self.end_time - time()
         hours_left = int((seconds_left/3600))

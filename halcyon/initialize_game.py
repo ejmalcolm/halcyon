@@ -21,4 +21,6 @@ def save_to_file():
     with open('gamestate.pickle', 'wb') as handle:
         pickle.dump(superlist, handle)
 
-save_to_file()
+if __name__ == '__main__':
+    print('Gamestate file written.')
+    save_to_file()

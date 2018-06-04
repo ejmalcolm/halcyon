@@ -1,0 +1,2 @@
+- a way of making sure that only the right players can view certain octants
+    - i.e. you should only be able to see octant contents if you have a unit in that octant

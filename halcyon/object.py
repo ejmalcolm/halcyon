@@ -7,9 +7,7 @@ class Object():
         self.name = name
         self.player = player
         self.planet = on_planet
-        #need a way to check if the object is doing something
         self.octant = in_octant
-        self.busy = False
         #add the object to the contents of the octant
         self.octant.add_occupant(self)
         #initialize the default, blank values for each tag category

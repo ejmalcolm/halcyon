@@ -2,8 +2,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import pika
 import sys
-import time
+import datetime, time
 import dill as pickle
+
+from initialize_game import save_to_file
 
 def get_gamestate():
     global planets
@@ -82,8 +84,11 @@ class OctantView(QtWidgets.QListWidget):
         try:
             item = self.selectedItems()[0].class_obj
         #if there's nothing selected, set the default to the first item
-        except Exception as e:
-            item = self.item(0).class_obj
+        except:
+            if self.item(0) == None:
+                return
+            else:
+                item = self.item(0).class_obj
         #make the context menu
         menu = QtWidgets.QMenu()
         #get all the client methods of that class as a tuple of tuples
@@ -156,24 +161,36 @@ class PlanetDialog(QtWidgets.QDialog):
         octant = planet.octants[octant_str]
         self.octant_view.view_octant(octant)
 
+class ActionThread(QtCore.QThread):
+
+    def run(self):
+        while True:
+            if (datetime.datetime.utcnow().minute == 30
+            or datetime.datetime.utcnow().minute == 00):
+                ui.ActionDock.launch_actions()
+                print('Actions launched! Loading new gamestate...')
+                save_to_file()
+                get_gamestate()
+            else:
+                print('Not the correct minute.')
+            time.sleep(30)
+
 class ActionDock():
 
     def __init__(self):
         self.dock = []
 
-    def dock_action(self, action):
+    def dock_action(self, action_ship):
         #check validity?
-        self.dock.append(action)
+        self.dock.append(action_ship)
+        ui.TaskView.addItem(action_ship[0] + ' at next half-hour interval')
 
     def launch_actions(self):
         #need to launch the action to the rabbitmq queue
         #first serializes the action with dill
         #then sends the serialized text to the queue
         #serialize the action dock
-        try:
-            serialized_dock = pickle.dumps(self.dock)
-        except Exception as e:
-            print(e)
+        serialized_dock = pickle.dumps(self.dock)
         ##RabbitMQ queue##
         connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
         channel = connection.channel()
@@ -183,6 +200,8 @@ class ActionDock():
                               body=serialized_dock)
         print("Sent serialized action dock to server")
         connection.close()
+        #clear the taskview
+        ui.TaskView.clear()
 
 class Ui_Halcyon(object):
 
@@ -239,7 +258,7 @@ class Ui_Halcyon(object):
         If there is a .bound_parameter to the alert_action:
         pass the bound_function with the parameter
         Else, just pass the bound_function naked
-        Either way, set Alertview to display the result
+        Either way, set AlertView to display the result
         '''
         statechange_prefix = 'This action will be launched at the next half-hour mark: '
         if action.bound_parameter and not action.statechange:
@@ -247,25 +266,32 @@ class Ui_Halcyon(object):
         elif not action.bound_parameter and not action.statechange:
             self.AlertView.setHtml(action.bound_function())
         elif action.bound_parameter and action.statechange:
-            self.AlertView.setHtml(statechange_prefix + action.bound_function(action.bound_parameter))
-            action_ship = (action.bound_function, action.bound_parameter)
+            returned_action_text = action.bound_function(action.bound_parameter)
+            self.AlertView.setHtml(statechange_prefix + returned_action_text)
+            action_ship = (returned_action_text, action.bound_function, action.bound_parameter)
             self.ActionDock.dock_action(action_ship)
         elif not action.bound_parameter and action.statechange:
-            self.AlertView.setHtml(statechange_prefix + action.bound_function())
-            action_ship = (action.bound_function, action.bound_parameter)
+            returned_action_text = action.bound_function(action.bound_parameter)
+            self.AlertView.setHtml(statechange_prefix + returned_action_text)
+            action_ship = (returned_action_text, action.bound_function, action.bound_parameter)
             self.ActionDock.dock_action(action_ship)
 
 if __name__ == "__main__":
     import sys
+    #grab the gamestate when the application is initially fired
     get_gamestate()
+    #setup the GUi basics
     app = QtWidgets.QApplication(sys.argv)
     Halcyon = QtWidgets.QMainWindow()
     ui = Ui_Halcyon()
     ui.setupUi(Halcyon)
-    ####add custom code between here####
+    #adds all the items from the gamestate
     ui.PlanetView.add_class_items(planets)
     ui.PlayerView.add_class_items(players)
     ui.TaskView.add_class_items(tasks)
-    ####add custome code above here####
+    ###starts the ActionLoop
+    thread = ActionThread()
+    thread.start()
+    ###
     Halcyon.show()
     sys.exit(app.exec_())
