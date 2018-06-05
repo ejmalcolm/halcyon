@@ -295,3 +295,5 @@ if __name__ == "__main__":
     ###
     Halcyon.show()
     sys.exit(app.exec_())
+
+input('prompt:')
