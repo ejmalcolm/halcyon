@@ -13,24 +13,22 @@ random_planet_names = ['Soskuter', 'Foplauhines', 'Koswuna', 'Ablarvis', 'Jeuner
                        'Belfry', 'Mortis', 'Cale', 'Lost', 'Swell', 'Violet 490',
                        'Gaia', 'Arrakis', 'Hoth', 'Yavin', 'Cadia', 'Indigo 10']
 names = sample(random_planet_names, 5)
-PlanetA = Planet(names[0])
-PlanetB = Planet(names[1])
-PlanetC = Planet(names[2])
-PlanetD = Planet(names[3])
-PlanetE = Planet(names[4])
-
-###
-planets = {planet.name: planet for planet in Planet.instances}
-tasks = {str(task): task for task in ACTIVE_TASKS}
-players = {str(player): player for player in Player.instances}
-
-superlist = [planets, tasks, players]
 
 def save_to_file():
+    planets = {planet.name: planet for planet in Planet.instances}
+    tasks = {str(task): task for task in ACTIVE_TASKS}
+    players = {str(player): player for player in Player.instances}
+    superlist = [planets, tasks, players]
     with open('gamestate.pickle', 'wb') as handle:
         pickle.dump(superlist, handle)
 
 if __name__ == '__main__':
+    ##initial gamestate
+    PlanetA = Planet(names[0])
+    PlanetB = Planet(names[1])
+    PlanetC = Planet(names[2])
+    PlanetD = Planet(names[3])
+    PlanetE = Planet(names[4])
     ##debug stuff
     Dune = Planet('Dune')
     Alpha = Automaton('Alpha', Dune, Dune.octants['North'], GM)

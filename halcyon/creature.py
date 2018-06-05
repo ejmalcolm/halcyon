@@ -12,9 +12,19 @@ class Creature(Object):
         self.busy = False
         self.client_methods.append(('Move Octant', self.move_octant, self.planet.octants, True))
 
-    def move_octant(self, target_octant):
-        if self.octant == target_octant:
-            return 'Unit is already in target octant.'
+    def move_octant(self, target_octant_str):
+        target_octant = self.planet.octants[target_octant_str]
+        try:
+            if self.octant == target_octant:
+                return '%s is already in %s' % (self.name, target_octant)
+            if self.move == 0:
+                return '%s has move of 0' % self.name
+            time_needed = (1/self.move)
+            result = '%s moves to %s' % (self.name, target_octant)
+            func_result = lambda _: self.octant.remove_occupant(self), target_octant.add_occupant(self)
+            move_task = Task(self, time_needed, self.player.add)
+        except Exception as e:
+            print(e)
 
     def __str__(self):
         return 'Creature named %s' % self.name

@@ -78,6 +78,11 @@ class Octant():
     def add_occupant(self, occupant):
         self.contents.append(occupant)
 
+    def remove_occupant(self, occupant):
+        if occupant not in self.contents:
+            return '%s is not in %s' % (occupant, self)
+        self.contents.remove(occupant)
+
     def class_objects_in(self, given_type):
         '''Returns all class objects of a given type in the octant as a list.'''
         valid_objects = []
