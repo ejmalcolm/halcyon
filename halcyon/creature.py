@@ -20,9 +20,10 @@ class Creature(Object):
             if self.move == 0:
                 return '%s has move of 0' % self.name
             time_needed = (1/self.move)
-            result = '%s moves to %s' % (self.name, target_octant)
+            func_result = '%s moves to %s' % (self.name, target_octant)
             func_result = lambda _: self.octant.remove_occupant(self), target_octant.add_occupant(self)
-            move_task = Task(self, time_needed, self.player.add)
+            move_task = Task(self, time_needed, func_result,
+                            self.player, result=func_result)
         except Exception as e:
             print(e)
 

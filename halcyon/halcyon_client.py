@@ -217,12 +217,10 @@ class ActionThread(QtCore.QThread):
         while True:
             if (datetime.datetime.utcnow().minute == 30
             or datetime.datetime.utcnow().minute == 00):
-                ui.ActionDock.launch_actions()
+                time.sleep(10)
                 print('Actions launched! Loading new gamestate...')
                 save_to_file()
                 load_gamestate()
-            else:
-                print('Not the correct minute.')
             time.sleep(30)
 
 class ActionDock():
@@ -230,26 +228,22 @@ class ActionDock():
     def __init__(self):
         self.dock = []
 
-    def dock_action(self, action_ship):
-        #check validity?
-        self.dock.append(action_ship)
-        ui.ActionDockView.addItem(action_ship[0] + ' at next half-hour interval')
-
-    def launch_actions(self):
+    def launch_action(self, action_ship):
         #need to launch the action to the rabbitmq queue
         #first serializes the action with dill
         #then sends the serialized text to the queue
-        #serialize the action dock
-        serialized_dock = pickle.dumps(self.dock)
+        #serialize the action ship
+        serialized_action = pickle.dumps(action_ship)
         ##RabbitMQ queue##
         connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
         channel = connection.channel()
         channel.queue_declare(queue='action')
         channel.basic_publish(exchange='',
                               routing_key='action',
-                              body=serialized_dock)
-        print("Sent serialized action dock to server")
+                              body=serialized_action)
+        print("Sent serialized action to server")
         connection.close()
+        ui.ActionDockView.addItem(action_ship[0] + ' at next half-hour interval')
         #clear the ActionDockView
         ui.ActionDockView.clear()
 
@@ -323,12 +317,12 @@ class Ui_Halcyon(object):
             returned_action_text = action.bound_function(action.bound_parameter)
             self.AlertView.setHtml(statechange_prefix + returned_action_text)
             action_ship = (returned_action_text, action.bound_function, action.bound_parameter)
-            self.ActionDock.dock_action(action_ship)
+            self.ActionDock.launch_action(action_ship)
         elif not action.bound_parameter and action.statechange:
             returned_action_text = action.bound_function(action.bound_parameter)
             self.AlertView.setHtml(statechange_prefix + returned_action_text)
             action_ship = (returned_action_text, action.bound_function, action.bound_parameter)
-            self.ActionDock.dock_action(action_ship)
+            self.ActionDock.launch_action(action_ship)
 
 if __name__ == "__main__":
     import sys
