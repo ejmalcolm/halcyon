@@ -10,6 +10,11 @@ class Creature(Object):
         self.move = move
         #used as a way to check if the creature is currently doing a task
         self.busy = False
+        self.client_methods.append(('Move Octant', self.move_octant, self.planet.octants, True))
+
+    def move_octant(self, target_octant):
+        if self.octant == target_octant:
+            return 'Unit is already in target octant.'
 
     def __str__(self):
         return 'Creature named %s' % self.name
