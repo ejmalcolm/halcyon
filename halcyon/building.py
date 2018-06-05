@@ -1,7 +1,7 @@
 from object import Object
 from tags import add_tags
 
-class Building_Plan(Object):
+class BuildingPlan(Object):
 
     def __init__(self, name, on_planet, in_octant, tags, player):
         super().__init__(name, on_planet, in_octant, player)
@@ -24,7 +24,7 @@ class Building_Plan(Object):
             print('%d units of Work left until %s is completed' % (self.work_needed, self.name))
 
     def plan_finished(self):
-        #remove the Building_Plan object from the octant
+        #remove the BuildingPlan object from the octant
         self.octant.contents.remove(self)
         #create a Building() object and throw it the octant contents
         #this can repeat because variable names are just pointers

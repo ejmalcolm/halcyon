@@ -78,6 +78,14 @@ class Octant():
     def add_occupant(self, occupant):
         self.contents.append(occupant)
 
+    def class_objects_in(self, given_type):
+        '''Returns all class objects of a given type in the octant as a list.'''
+        valid_objects = []
+        for object in self.contents:
+            if type(object).__name__ == given_type:
+                valid_objects.append(object)
+        return valid_objects
+
 class Planet():
 
     instances = []

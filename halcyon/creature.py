@@ -1,7 +1,7 @@
 from object import Object
 from tags import add_tags
 from task import Task
-from building import Building_Plan
+from building import BuildingPlan
 
 class Creature(Object):
 
@@ -20,10 +20,10 @@ class Laborer(Creature):
         super().__init__(name, on_planet, in_octant, player, move=1/5)
         self.harvest_rate = harvest_rate
         self.build_rate = build_rate
-        self.client_methods = (
-                            ('Harvest Resource', self.harvest_resource, self.octant.resources, True),
-                            #('Construct Building', self.construct_building, self.octant.class_objects('BuildingPlan'), True)
-                                )
+        self.client_methods.append(('Harvest Resource', self.harvest_resource,
+                                    self.octant.resources, True))
+        self.client_methods.append(('Construct Building', self.construct_building,
+                                    self.octant.class_objects_in('BuildingPlan'), True))
 
     def __str__(self):
         return 'Laborer named %s' % self.name
@@ -71,14 +71,14 @@ class Laborer(Creature):
 class CrewMember(Laborer):
 
     def __init__(self, name, on_planet, in_octant, player):
-        super().__init__(name, on_planet, in_octant, harvest_rate=1/12)
+        super().__init__(name, on_planet, in_octant, player, harvest_rate=1/12)
         #add the Flesh material to the material tags
         add_tags(self, ['Flesh'])
 
 class Engineer(CrewMember):
 
     def make_building_plan(self, name, tags):
-        created_plan = Building_Plan(name, self.planet, self.octant, tags, self.player)
+        created_plan = BuildingPlan(name, self.planet, self.octant, tags, self.player)
 
 class Soldier(CrewMember):
     pass

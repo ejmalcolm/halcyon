@@ -7,7 +7,7 @@ import dill as pickle
 
 from initialize_game import save_to_file
 
-def get_gamestate():
+def load_gamestate():
     global planets
     global tasks
     global players
@@ -16,6 +16,55 @@ def get_gamestate():
     planets = superlist[0]
     tasks = superlist[1]
     players = superlist[2]
+    ui.PlanetView.clear()
+    ui.PlanetView.add_class_items(planets)
+    ui.PlayerView.clear()
+    ui.PlayerView.add_class_items(players)
+    ui.TaskView.clear()
+    ui.TaskView.add_class_items(tasks)
+
+def filter_player_vision(class_items):
+    '''Takes an input of class items and returns only the ones that the current player has vision of'''
+    filtered_dict = {}
+    for item_name in class_items:
+        class_obj = class_items[item_name]
+        if class_obj.player.name == current_player:
+            filtered_dict[item_name] = class_obj
+    return filtered_dict
+
+def check_octant_vision(octant_class_items):
+    '''Takes an input of class items- the contents of a given octant- and checks if the current player has vision'''
+    for item_name in octant_class_items:
+        class_obj = octant_class_items[item_name]
+        if class_obj.player.name == current_player:
+            return True
+        return False
+
+class LoginDialog(QtWidgets.QDialog):
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setGeometry(QtCore.QRect(500, 500, 200, 200))
+        self.textName = QtWidgets.QLineEdit(self)
+        self.textPass = QtWidgets.QLineEdit(self)
+        self.loginButton = QtWidgets.QPushButton('Login', self)
+        self.loginButton.clicked.connect(self.handle_login)
+        layout = QtWidgets.QVBoxLayout(self)
+        layout.addWidget(self.textName)
+        layout.addWidget(self.textPass)
+        layout.addWidget(self.loginButton)
+
+    def handle_login(self):
+        userpass = {'admin' : 'password', 'Gamemaster' : 'gm'}
+        username = self.textName.text()
+        password = self.textPass.text()
+        if (username in userpass and
+            userpass[username] == password):
+            global current_player
+            current_player = self.textName.text()
+            self.accept()
+        else:
+            QtWidgets.QMessageBox.warning(self, 'Error', 'Incorrect user or password')
 
 class DetailView(QtWidgets.QListWidget):
     '''The class for displaying lists of class objects
@@ -131,7 +180,8 @@ class OctantView(QtWidgets.QListWidget):
         contents = octant_obj.contents
         names = [str(obj) for obj in contents]
         name_object_dict = {key: value for key, value in zip(names, contents)}
-        self.add_class_items(name_object_dict)
+        if check_octant_vision(name_object_dict):
+            self.add_class_items(name_object_dict)
 
 class PlanetDialog(QtWidgets.QDialog):
 
@@ -170,7 +220,7 @@ class ActionThread(QtCore.QThread):
                 ui.ActionDock.launch_actions()
                 print('Actions launched! Loading new gamestate...')
                 save_to_file()
-                get_gamestate()
+                load_gamestate()
             else:
                 print('Not the correct minute.')
             time.sleep(30)
@@ -183,7 +233,7 @@ class ActionDock():
     def dock_action(self, action_ship):
         #check validity?
         self.dock.append(action_ship)
-        ui.TaskView.addItem(action_ship[0] + ' at next half-hour interval')
+        ui.ActionDockView.addItem(action_ship[0] + ' at next half-hour interval')
 
     def launch_actions(self):
         #need to launch the action to the rabbitmq queue
@@ -200,8 +250,8 @@ class ActionDock():
                               body=serialized_dock)
         print("Sent serialized action dock to server")
         connection.close()
-        #clear the taskview
-        ui.TaskView.clear()
+        #clear the ActionDockView
+        ui.ActionDockView.clear()
 
 class Ui_Halcyon(object):
 
@@ -238,9 +288,13 @@ class Ui_Halcyon(object):
         ##define the ActionDock that runs in the background
         ##manages sending actions to the server every 30 minutes
         self.ActionDock = ActionDock()
-        ##define the task queue that shows all tasks
+        ##define the ActionDockView that shows the actions that are going to be sent to the server
+        self.ActionDockView = QtWidgets.QListWidget(self.centralwidget)
+        self.ActionDockView.setGeometry(QtCore.QRect(610, 570, 270, 121))
+        self.ActionDockView.setObjectName("ActionDockView")
+        ##define the TaskView that shows tasks that are already active in the gamestate
         self.TaskView = DetailView(self.centralwidget, 'placeholder')
-        self.TaskView.setGeometry(QtCore.QRect(610, 570, 581, 121))
+        self.TaskView.setGeometry(QtCore.QRect(900, 570, 290, 121))
         self.TaskView.setObjectName("TaskView")
 
         Halcyon.setCentralWidget(self.centralwidget)
@@ -278,22 +332,20 @@ class Ui_Halcyon(object):
 
 if __name__ == "__main__":
     import sys
-    #grab the gamestate when the application is initially fired
-    get_gamestate()
-    #setup the GUi basics
+    #setup the GUI basics
     app = QtWidgets.QApplication(sys.argv)
     Halcyon = QtWidgets.QMainWindow()
     ui = Ui_Halcyon()
     ui.setupUi(Halcyon)
-    #adds all the items from the gamestate
-    ui.PlanetView.add_class_items(planets)
-    ui.PlayerView.add_class_items(players)
-    ui.TaskView.add_class_items(tasks)
-    ###starts the ActionLoop
-    thread = ActionThread()
-    thread.start()
-    ###
-    Halcyon.show()
-    sys.exit(app.exec_())
-
-input('prompt:')
+    #start the login dialog
+    login = LoginDialog()
+    #if login credentials are correct
+    if login.exec_() == QtWidgets.QDialog.Accepted:
+        #loads gamestate from file and updates all views
+        load_gamestate()
+        #starts the ActionLoop
+        thread = ActionThread()
+        thread.start()
+        #starts the main app
+        Halcyon.show()
+        sys.exit(app.exec_())

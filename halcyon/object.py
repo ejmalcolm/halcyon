@@ -12,6 +12,7 @@ class Object():
         self.octant.add_occupant(self)
         #initialize the default, blank values for each tag category
         self.tags = {'Material' : [], 'Structure' : [], 'Function' : []}
+        self.client_methods = []
 
     def use_function(self, function):
         #splits the given function into a category of function and a specific event

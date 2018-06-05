@@ -25,4 +25,9 @@ import datetime
 #
 # bplan = building.Building_Plan('buh', Dune, Dune.octants['North'], ['Wood', 'Metal'], player.GM)
 
-print(datetime.datetime.utcnow().minute)
+buh = {'a' : 'b'}
+
+if buh[1] == 'b':
+    print(1)
+else:
+    print(2)

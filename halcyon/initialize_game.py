@@ -1,4 +1,4 @@
-from creature import Automaton
+from creature import Automaton, Engineer
 from planet import Planet, Octant
 from task import ACTIVE_TASKS
 from player import Player, GM
@@ -7,7 +7,7 @@ import dill as pickle
 ###Stuff that needs to be added at the start of game goes here
 Dune = Planet('Dune')
 Alpha = Automaton('Alpha', Dune, Dune.octants['North'], GM)
-
+Beta = Engineer('Beta', Dune, Dune.octants['North'], GM)
 
 
 ###
