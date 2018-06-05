@@ -36,9 +36,13 @@ def check_octant_vision(octant_class_items):
     '''Takes an input of class items- the contents of a given octant- and checks if the current player has vision'''
     for item_name in octant_class_items:
         class_obj = octant_class_items[item_name]
-        if class_obj.player.name == current_player:
-            return True
-        return False
+        try:
+            if class_obj.player.name == current_player:
+                return True
+        #if theres an object in the octant with no player
+        except:
+            pass
+    return False
 
 class LoginDialog(QtWidgets.QDialog):
 
