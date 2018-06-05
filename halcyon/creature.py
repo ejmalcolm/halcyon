@@ -77,6 +77,10 @@ class CrewMember(Laborer):
 
 class Engineer(CrewMember):
 
+    def __init__(self, name, on_planet, in_octant, player):
+        super().__init__(name, on_planet, in_octant, player)
+        #self.client_methods.append(('Create Building Plan'))
+
     def make_building_plan(self, name, tags):
         created_plan = BuildingPlan(name, self.planet, self.octant, tags, self.player)
 

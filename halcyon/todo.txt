@@ -6,3 +6,12 @@
 -make sure tasks aren't being duplicated when they're called by ui.cause_action, i think they might be
 
 -make sure tasks are actually happening and causing gamestate changes
+
+-make sure octant.class_objects_in() checks actually update everytime load_gamestate is called so that there aren't phantom action parameters
+
+
+STARTED WORK ON:
+
+- engineer create_building_plan, going to be very interesting because it needs a large amount of arguments that can be multiple selected
+    - honestly its probably best to just special-case it
+    - send it in a special tuple, detect what it is in halcyon_client, then create a dialog just for making a building plan
