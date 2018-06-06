@@ -221,9 +221,8 @@ class ActionThread(QtCore.QThread):
         while True:
             if (datetime.datetime.utcnow().minute == 30
             or datetime.datetime.utcnow().minute == 00):
-                time.sleep(10)
                 print('Actions launched! Loading new gamestate...')
-                save_to_file()
+                time.sleep(10)
                 load_gamestate()
             time.sleep(30)
 
