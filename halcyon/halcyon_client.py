@@ -7,7 +7,7 @@ import dill as pickle
 
 from initialize_game import save_to_file
 
-def load_gamestate():
+def client_load_gamestate():
     global planets
     global tasks
     global players
@@ -223,7 +223,7 @@ class ActionThread(QtCore.QThread):
             or datetime.datetime.utcnow().minute == 00):
                 print('Actions launched! Loading new gamestate...')
                 time.sleep(10)
-                load_gamestate()
+                client_load_gamestate()
             time.sleep(30)
 
 class ActionDock():
@@ -339,7 +339,7 @@ if __name__ == "__main__":
     #if login credentials are correct
     if login.exec_() == QtWidgets.QDialog.Accepted:
         #loads gamestate from file and updates all views
-        load_gamestate()
+        client_load_gamestate()
         #starts the ActionLoop
         thread = ActionThread()
         thread.start()

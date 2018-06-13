@@ -13,6 +13,8 @@ class Creature(Object):
         self.client_methods.append(('Move Octant', self.move_octant, self.planet.octants, True))
 
     def move_octant(self, target_octant_str):
+        if self.busy:
+            return '%s is already occupied' % self.name
         target_octant = self.planet.octants[target_octant_str]
         if self.octant == target_octant:
             return '%s is already in %s' % (self.name, target_octant)

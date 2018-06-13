@@ -11,8 +11,9 @@ def load_gamestate():
     planets = superlist[0]
     tasks = superlist[1]
     players = superlist[2]
-    for class_list in superlist:
-        for class_obj in class_list:
+    for class_dict in superlist:
+        obj_list = [class_dict[key] for key in class_dict]
+        for class_obj in obj_list:
             class_obj.instances.append(class_obj)
 
 def process_action(serialized_action):

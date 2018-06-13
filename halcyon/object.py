@@ -71,7 +71,7 @@ class Object():
         return attributes
 
     def get_functions(self):
-        attributes = get_attributes(self)
+        attributes = self.get_attributes()
         return_list = []
         for attribute in attributes:
             if '|' in attribute:

@@ -30,11 +30,5 @@ Arrakis = planet.Planet('Hoth')
 #with open('gamestate.pickle', 'wb') as handle:
 #    pickle.dump(planet.Planet.instances, handle)
 
-print(Dune.instances)
-
-with open('gamestate.pickle', 'rb') as handle:
-    a = pickle.load(handle)
-    for object in a:
-        planet.Planet.instances.append(object)
-
-print(planet.Planet.instances)
+a = vehicle.Halcyon(Dune, Dune.octants['North'], player.GM)
+print(a.get_functions())
