@@ -87,6 +87,9 @@ class DetailView(QtWidgets.QListWidget):
             self.addItem(qt_item_widget)
             qt_item_widget.class_obj = item_dict[item_name]
 
+    def special_method(self):
+        return
+
     def open_menu(self, position):
         #grab which class item is being requested by selection
         try:
@@ -125,12 +128,17 @@ class DetailView(QtWidgets.QListWidget):
         action = menu.exec_(self.mapToGlobal(position))
 
 class OctantView(QtWidgets.QListWidget):
+    '''View class for seeing the contents of given octant
+    '''
 
     def __init__(self, parent):
         super().__init__(parent)
         self.current_octant = None
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.open_menu)
+
+    def special_method(self, method_name):
+        print('ok')
 
     def open_menu(self, position):
         #grab which class item is being requested by selection
@@ -148,6 +156,10 @@ class OctantView(QtWidgets.QListWidget):
         item_methods = item.client_methods
         #add all the methods as QActions
         for method in item_methods:
+            #check if it's a special-case method
+            if method[0] == 'Create Building Plan':
+                self.special_method('Create Building Plan')
+                continue
             method_text = method[0]
             method_function = method[1]
             method_parameters = method[2]
@@ -311,7 +323,7 @@ class Ui_Halcyon(object):
         Else, just pass the bound_function naked
         Either way, set AlertView to display the result
         '''
-        statechange_prefix = 'This action will be launched at the next half-hour mark: '
+        statechange_prefix = 'Action docked: '
         if action.bound_parameter and not action.statechange:
             self.AlertView.setHtml(action.bound_function(action.bound_parameter))
         elif not action.bound_parameter and not action.statechange:
