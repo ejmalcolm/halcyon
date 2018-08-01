@@ -137,8 +137,43 @@ class OctantView(QtWidgets.QListWidget):
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.open_menu)
 
-    def special_method(self, method_name):
-        print('ok')
+    def CreateBuildingPlan(self, menu_object):
+        menu = menu_object
+        #set the SMDialog to the Dialog we'll be using for the building plan creator
+        SMDialog = QtWidgets.QDialog(self)
+        SMDialog.setGeometry(QtCore.QRect(700, 500, 500, 500))
+        #add the label
+        CBPLabel = QtWidgets.QLabel('Double-click the tags you wish to apply to the building you are creating.',
+                                    parent=SMDialog)
+        CBPLabel.setGeometry(QtCore.QRect(0, 0, 500, 25))
+        CBPLabel.setIndent(85)
+        #set up MaterialList
+        MaterialList = QtWidgets.QListWidget(SMDialog)
+        MaterialList.setGeometry(QtCore.QRect(0, 25, 100, 250))
+        MaterialList.addItem('a')
+        #when item clicked, get the item row, remove the item by row, add the item to ActiveList
+        MaterialList.itemDoubleClicked.connect(lambda x:
+                                                ActiveList.addItem(
+                                                MaterialList.takeItem(
+                                                MaterialList.row(x))))
+        #set up StructureList
+        StructureList = QtWidgets.QListWidget(SMDialog)
+        StructureList.setGeometry(QtCore.QRect(200, 25, 100, 250))
+        StructureList.itemDoubleClicked.connect(lambda x:
+                                                ActiveList.addItem(
+                                                StructureList.takeItem(
+                                                StructureList.row(x))))
+        #set up FunctionList
+        FunctionList = QtWidgets.QListWidget(SMDialog)
+        FunctionList.setGeometry(QtCore.QRect(400, 25, 100, 250))
+        FunctionList.itemDoubleClicked.connect(lambda x:
+                                                ActiveList.addItem(
+                                                FunctionList.takeItem(
+                                                FunctionList.row(x))))
+        #set up ActiveList that shows which tags are active
+        ActiveList = QtWidgets.QListWidget(SMDialog)
+        ActiveList.setGeometry(QtCore.QRect(100, 350, 300, 100))
+        SMDialog.show()
 
     def open_menu(self, position):
         #grab which class item is being requested by selection
@@ -158,7 +193,7 @@ class OctantView(QtWidgets.QListWidget):
         for method in item_methods:
             #check if it's a special-case method
             if method[0] == 'Create Building Plan':
-                self.special_method('Create Building Plan')
+                self.CreateBuildingPlan(menu)
                 continue
             method_text = method[0]
             method_function = method[1]
