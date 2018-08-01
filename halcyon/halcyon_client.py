@@ -150,7 +150,6 @@ class OctantView(QtWidgets.QListWidget):
         #set up MaterialList
         MaterialList = QtWidgets.QListWidget(SMDialog)
         MaterialList.setGeometry(QtCore.QRect(0, 25, 100, 250))
-        MaterialList.addItem('a')
         #when item clicked, get the item row, remove the item by row, add the item to ActiveList
         MaterialList.itemDoubleClicked.connect(lambda x:
                                                 ActiveList.addItem(
@@ -170,9 +169,18 @@ class OctantView(QtWidgets.QListWidget):
                                                 ActiveList.addItem(
                                                 FunctionList.takeItem(
                                                 FunctionList.row(x))))
+        ##below here add all possible tags##
+        kuh = QtWidgets.QListWidgetItem('KUH')
+        kuh.home_list = MaterialList
+        MaterialList.addItem(kuh)
         #set up ActiveList that shows which tags are active
         ActiveList = QtWidgets.QListWidget(SMDialog)
         ActiveList.setGeometry(QtCore.QRect(100, 350, 300, 100))
+        #on double click, access the homelist of the item and return it
+        ActiveList.itemDoubleClicked.connect(lambda x:
+                                                x.home_list.addItem(
+                                                ActiveList.takeItem(
+                                                ActiveList.row(x))))
         SMDialog.show()
 
     def open_menu(self, position):
