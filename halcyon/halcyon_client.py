@@ -41,13 +41,14 @@ def check_octant_vision(octant_class_items):
                 return True
         #if theres an object in the octant with no player
         except:
-            pass
+            continue
     return False
 
 class LoginDialog(QtWidgets.QDialog):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.setWindowTitle('Login')
         self.setGeometry(QtCore.QRect(500, 500, 200, 200))
         self.textName = QtWidgets.QLineEdit(self)
         self.textPass = QtWidgets.QLineEdit(self)
@@ -59,7 +60,7 @@ class LoginDialog(QtWidgets.QDialog):
         layout.addWidget(self.loginButton)
 
     def handle_login(self):
-        userpass = {'admin' : 'password', 'Gamemaster' : 'gm'}
+        userpass = {'Gamemaster' : 'gm'}
         username = self.textName.text()
         password = self.textPass.text()
         if (username in userpass and
@@ -86,9 +87,6 @@ class DetailView(QtWidgets.QListWidget):
             qt_item_widget = QtWidgets.QListWidgetItem(item_name)
             self.addItem(qt_item_widget)
             qt_item_widget.class_obj = item_dict[item_name]
-
-    def special_method(self):
-        return
 
     def open_menu(self, position):
         #grab which class item is being requested by selection
@@ -137,11 +135,11 @@ class OctantView(QtWidgets.QListWidget):
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.open_menu)
 
-    def CreateBuildingPlan(self, menu_object):
-        menu = menu_object
+    def CreateBuildingPlan(self, menu_object, item):
         #set the SMDialog to the Dialog we'll be using for the building plan creator
         SMDialog = QtWidgets.QDialog(self)
         SMDialog.setGeometry(QtCore.QRect(700, 500, 500, 500))
+        SMDialog.setWindowTitle('Create Building Plan')
         #add the label
         CBPLabel = QtWidgets.QLabel('Double-click the tags you wish to apply to the building you are creating.',
                                     parent=SMDialog)
@@ -181,7 +179,15 @@ class OctantView(QtWidgets.QListWidget):
                                                 x.home_list.addItem(
                                                 ActiveList.takeItem(
                                                 ActiveList.row(x))))
-        SMDialog.show()
+        #set it up so that it works as a menu button
+        menu = menu_object
+        CBPAction = menu.addAction('Create Building Plan')
+        CBPAction.bound_function = SMDialog.show
+        #set up the QPushButton
+        CBPButton = QtWidgets.QPushButton(SMDialog)
+        CBPButton.setGeometry(QtCore.QRect(200, 450, 100, 50))
+        CBPButton.setText('Create plan')
+        CBPButton.clicked.connect(item.make_building_plan)
 
     def open_menu(self, position):
         #grab which class item is being requested by selection
@@ -201,7 +207,7 @@ class OctantView(QtWidgets.QListWidget):
         for method in item_methods:
             #check if it's a special-case method
             if method[0] == 'Create Building Plan':
-                self.CreateBuildingPlan(menu)
+                self.CreateBuildingPlan(menu, item)
                 continue
             method_text = method[0]
             method_function = method[1]
@@ -360,6 +366,11 @@ class Ui_Halcyon(object):
         self.OctantSelect.setText(_translate("Halcyon", "Select Octant"))
 
     def cause_action(self, action):
+        '''The unique functions
+        Return so it doesn't go through the result
+        '''
+        if action.text() == 'Create Building Plan':
+            return action.bound_function()
         '''Sets the AlertView to show the results of the alert_actionself.
         If there is a .bound_parameter to the alert_action:
         pass the bound_function with the parameter
@@ -386,6 +397,7 @@ if __name__ == "__main__":
     import sys
     #setup the GUI basics
     app = QtWidgets.QApplication(sys.argv)
+    app.setWindowIcon(QtGui.QIcon('halcyonicon.png'))
     Halcyon = QtWidgets.QMainWindow()
     ui = Ui_Halcyon()
     ui.setupUi(Halcyon)

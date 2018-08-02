@@ -11,6 +11,5 @@
 
 STARTED WORK ON:
 
-- engineer create_building_plan, going to be very interesting because it needs a large amount of arguments that can be multiple selected
-    - honestly its probably best to just special-case it
-    - send it in a special tuple, detect what it is in halcyon_client, then create a dialog just for making a building plan
+- engineer create_building_plan
+    -just need to add the tags from the player storage

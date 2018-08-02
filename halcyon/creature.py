@@ -97,8 +97,13 @@ class Engineer(CrewMember):
         super().__init__(name, on_planet, in_octant, player)
         self.client_methods.append(('Create Building Plan',))
 
-    def make_building_plan(self, name, tags):
-        created_plan = BuildingPlan(name, self.planet, self.octant, tags, self.player)
+    def __str__(self):
+        return 'Engineer named %s' % self.name
+
+    def make_building_plan(self):
+        self.plan_name = ''
+        self.plan_tags = []
+        self.creating_plan = BuildingPlan(name, self.planet, self.octant, tags, self.player)
 
 class Soldier(CrewMember):
     pass
