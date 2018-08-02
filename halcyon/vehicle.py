@@ -20,6 +20,10 @@ class Halcyon(SpaceShip):
 
     def __init__(self, on_planet, in_octant, player):
         super().__init__('Halcyon', on_planet, in_octant, 100000, player)
-        #add_tags(self, tags_list=['Iridium', 'Unique|Cryogenic Chamber',
-                                #'Unique|Incubator', 'Automaton Cradle',
-                                #'Unique|CSAT', 'Unique|Inspect Planet'])
+        add_tags(self, tags_list=['Iridium', 'Automaton Cradle'])
+        self.client_methods.append(
+                                    ('Cryogenic Chamber',)
+                                    ('Incubator',)
+                                    ('Research Lab',)
+                                    ('CSAT',)
+                                    )

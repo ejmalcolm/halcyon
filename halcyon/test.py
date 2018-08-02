@@ -17,7 +17,7 @@ Hoth = planet.Planet('Hoth')
 
 ##dont delete above this plzty
 
-bldng = building.Building('Wood Craft Factory', Dune, Dune.octants['North'], ['Wood', 'Refinery: Stone', 'Factory: Wood Crafts'], player.GM)
+bldng = building.Building('Automaton Cradle', Dune, Dune.octants['North'], ['Wood', 'Automaton Cradle'], player.GM)
 #
 # spcshp = vehicle.SpaceShip('Halcyon', Dune, Dune.octants['North'], 100000)
 #
@@ -30,4 +30,6 @@ bldng = building.Building('Wood Craft Factory', Dune, Dune.octants['North'], ['W
 #    pickle.dump(planet.Planet.instances, handle)
 
 #print(bldng.get_all_tags())
-print(bldng.get_attributes())
+functions = bldng.get_attributes()[2]
+print(functions)
+print(bldng.use_function(functions[0]))
