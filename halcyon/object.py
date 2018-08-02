@@ -1,5 +1,5 @@
 from importlib import import_module
-from tags import add_tags
+from tags import add_tags, MATERIAL_TAGS, STRUCTURE_TAGS, FUNCTION_TAGS
 
 class Object():
 
@@ -54,29 +54,17 @@ class Object():
 
     def get_attributes(self):
         attributes = []
-        #for each material tag
-        for material in self.tags['Material']:
-            #get all attributes for each tag
-            tag_attributes = MATERIAL_TAGS[material]['Attributes']
-            #combine the attributes list with the one being return
-            attributes += tag_attributes
-        #repeat for structure tags
-        for structure in self.tags['Structure']:
-            tag_attributes = STRUCTURE_TAGS[structure]['Attributes']
-            attributes += tag_attributes
-        #repeat for function tags
-        for function in self.tags['Function']:
-            tag_attributes = FUNCTION_TAGS[function]['Attributes']
-            attributes += tag_attributes
+        mat_atts = [MATERIAL_TAGS[material]['Attributes'] for material in self.tags['Material']]
+        struct_atts = [STRUCTURE_TAGS[structure]['Attributes'] for structure in self.tags['Structure']]
+        func_atts = [FUNCTION_TAGS[function]['Attributes'] for function in self.tags['Function']]
+        #since the attributes are naturally in lists, combine the sublists into a full list
+        #for each type of attribute
+        for sublist in [mat_atts, struct_atts, func_atts]:
+            full_list = []
+            for subsublist in sublist:
+                full_list.extend(subsublist)
+            attributes.append(full_list)
         return attributes
-
-    def get_functions(self):
-        attributes = self.get_attributes()
-        return_list = []
-        for attribute in attributes:
-            if '|' in attribute:
-                    return_list.append(attribute)
-        return return_list
 
     def get_all_tags(self):
         tags = []

@@ -13,11 +13,11 @@ import datetime
 import dill as pickle
 
 Dune = planet.Planet('Arrakis')
-Arrakis = planet.Planet('Hoth')
+Hoth = planet.Planet('Hoth')
 
 ##dont delete above this plzty
 
-# bldng = building.Building('Wood Craft Factory', Dune, Dune.octants['North'], ['Refinery: Stone', 'Factory: Wood Crafts'], player.GM)
+bldng = building.Building('Wood Craft Factory', Dune, Dune.octants['North'], ['Wood', 'Refinery: Stone', 'Factory: Wood Crafts'], player.GM)
 #
 # spcshp = vehicle.SpaceShip('Halcyon', Dune, Dune.octants['North'], 100000)
 #
@@ -26,9 +26,8 @@ Arrakis = planet.Planet('Hoth')
 # labor = creature.Laborer('bob', Dune, Dune.octants['North'], build_rate=5, player=player.GM)
 #
 # bplan = building.BuildingPlan('buh', Dune, Dune.octants['North'], ['Wood', 'Metal'], player.GM)
-
 #with open('gamestate.pickle', 'wb') as handle:
 #    pickle.dump(planet.Planet.instances, handle)
 
-a = vehicle.Halcyon(Dune, Dune.octants['North'], player.GM)
-print(a.get_functions())
+#print(bldng.get_all_tags())
+print(bldng.get_attributes())
