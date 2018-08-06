@@ -14,6 +14,10 @@ class Object():
         self.tags = {'Material' : [], 'Structure' : [], 'Function' : []}
         self.client_methods = [('Inspect', self.__str__, None, False),]
 
+    def add_client_methods(self):
+        if self.get_attributes()[2]:
+            self.client_methods.append(('Use Function', self.use_function, self.get_attributes()[2], True),)
+
     def use_function(self, function):
         #splits the given function into a category of function and a specific event
         category = function.split('|')[0]

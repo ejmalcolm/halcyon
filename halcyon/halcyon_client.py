@@ -272,6 +272,7 @@ class PlanetDialog(QtWidgets.QDialog):
         super().__init__()
         dialog = QtWidgets.QDialog(Halcyon)
         dialog.setGeometry(QtCore.QRect(500, 500, 200, 200))
+        dialog.setWindowTitle('Select Octant')
         self.planet_display = QtWidgets.QComboBox(dialog)
         self.planet_display.setGeometry(QtCore.QRect(0, 0, 200, 20))
         self.planet_display.addItems(planets)

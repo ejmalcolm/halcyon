@@ -17,3 +17,5 @@ def add_tags(self, tags_list):
         else:
             print("Tag '%s' does not exist" % tag)
             continue
+    #check if any extra methods need to be added
+    self.add_client_methods()

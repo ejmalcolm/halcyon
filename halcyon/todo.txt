@@ -9,6 +9,9 @@
     -tech tree esque
     -stored under the player object
 
+-put use_function as a client method for all objects
+    - the arguments are all function tags of the object
+
 STARTED WORK ON:
 
 - engineer create_building_plan

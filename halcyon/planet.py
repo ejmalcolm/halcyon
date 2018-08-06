@@ -51,7 +51,7 @@ class Civilization():
         self.status = status
 
     def __str__(self):
-        return 'a civilization of tier %d' % self.tier
+        return 'A civilization of tier %d' % self.tier
 
     def change_tier(self, tier):
         self.tier = tier
