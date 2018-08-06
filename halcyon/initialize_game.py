@@ -34,7 +34,7 @@ if __name__ == '__main__':
     Dune = Planet('Dune')
     Alpha = Automaton('Alpha', Dune, Dune.octants['North'], GM)
     Beta = Engineer('Beta', Dune, Dune.octants['North'], GM)
-    Starblaster = Halcyon('Starblaster', Dune, Dune.octants['North'], GM)
+    Starblaster = Halcyon(Dune, Dune.octants['North'], GM)
     ##write the pickle file
     print('Gamestate file written.')
     save_to_file()

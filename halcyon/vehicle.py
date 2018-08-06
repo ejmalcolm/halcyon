@@ -19,11 +19,14 @@ class SpaceShip(Vehicle):
 class Halcyon(SpaceShip):
 
     def __init__(self, on_planet, in_octant, player):
-        super().__init__('Halcyon', on_planet, in_octant, 100000, player)
+        super().__init__("%s's Halcyon" % player, on_planet, in_octant, 100000, player)
         add_tags(self, tags_list=['Iridium', 'Automaton Cradle'])
-        self.client_methods.append(
-                                    ('Cryogenic Chamber',)
-                                    ('Incubator',)
-                                    ('Research Lab',)
-                                    ('CSAT',)
-                                    )
+        # self.client_methods.extend(
+        #                             (('Cryogenic Chamber',),
+        #                             ('Incubator',),
+        #                             ('Research Lab',),
+        #                             ('CSAT',))
+        #                             )
+
+    def __str__(self):
+        return "%s's Halcyon" % self.player

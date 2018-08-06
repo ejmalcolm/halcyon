@@ -220,13 +220,17 @@ class OctantView(QtWidgets.QListWidget):
         #add all the methods as QActions
         for method in item_methods:
             #check if it's a special-case method
-            if method[0] == 'Create Building Plan':
-                self.create_building_plan(menu, item)
+            #works via checking if there's just method text or is there more
+            try:
+                method_text = method[0]
+                method_function = method[1]
+                method_parameters = method[2]
+                method_statechange = method[3]
+            except Exception as e:
+                print('Special method detected %s' % method_text)
+                if method_text == 'Create Building Plan':
+                    self.create_building_plan(menu, item)
                 continue
-            method_text = method[0]
-            method_function = method[1]
-            method_parameters = method[2]
-            method_statechange = method[3]
             if method_parameters:
                 #add a an additional menu to the main menu
                 parameterMenu = menu.addMenu(method_text)
@@ -416,14 +420,15 @@ if __name__ == "__main__":
     ui = Ui_Halcyon()
     ui.setupUi(Halcyon)
     #start the login dialog
-    login = LoginDialog()
+    ##login = LoginDialog()
     #if login credentials are correct
-    if login.exec_() == QtWidgets.QDialog.Accepted:
-        #loads gamestate from file and updates all views
-        client_load_gamestate()
-        #starts the ActionLoop
-        thread = ActionThread()
-        thread.start()
-        #starts the main app
-        Halcyon.show()
-        sys.exit(app.exec_())
+    ##if login.exec_() == QtWidgets.QDialog.Accepted:
+    #loads gamestate from file and updates all views
+    client_load_gamestate()
+    current_player = 'Gamemaster'
+    #starts the ActionLoop
+    thread = ActionThread()
+    thread.start()
+    #starts the main app
+    Halcyon.show()
+    sys.exit(app.exec_())
