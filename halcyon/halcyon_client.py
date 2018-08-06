@@ -135,7 +135,7 @@ class OctantView(QtWidgets.QListWidget):
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.open_menu)
 
-    def CreateBuildingPlan(self, menu_object, item):
+    def create_building_plan(self, menu_object, creator):
         #set the SMDialog to the Dialog we'll be using for the building plan creator
         SMDialog = QtWidgets.QDialog(self)
         SMDialog.setGeometry(QtCore.QRect(700, 500, 500, 500))
@@ -145,40 +145,44 @@ class OctantView(QtWidgets.QListWidget):
                                     parent=SMDialog)
         CBPLabel.setGeometry(QtCore.QRect(0, 0, 500, 25))
         CBPLabel.setIndent(85)
+        #add the box for the NameBox
+        self.CBPNameBox = QtWidgets.QLineEdit(SMDialog)
+        self.CBPNameBox.setGeometry(QtCore.QRect(200, 300, 100, 20))
         #set up MaterialList
         MaterialList = QtWidgets.QListWidget(SMDialog)
         MaterialList.setGeometry(QtCore.QRect(0, 25, 100, 250))
         #when item clicked, get the item row, remove the item by row, add the item to ActiveList
         MaterialList.itemDoubleClicked.connect(lambda x:
-                                                ActiveList.addItem(
+                                                self.ActiveList.addItem(
                                                 MaterialList.takeItem(
                                                 MaterialList.row(x))))
         #set up StructureList
         StructureList = QtWidgets.QListWidget(SMDialog)
         StructureList.setGeometry(QtCore.QRect(200, 25, 100, 250))
         StructureList.itemDoubleClicked.connect(lambda x:
-                                                ActiveList.addItem(
+                                                self.ActiveList.addItem(
                                                 StructureList.takeItem(
                                                 StructureList.row(x))))
         #set up FunctionList
         FunctionList = QtWidgets.QListWidget(SMDialog)
         FunctionList.setGeometry(QtCore.QRect(400, 25, 100, 250))
         FunctionList.itemDoubleClicked.connect(lambda x:
-                                                ActiveList.addItem(
+                                                self.ActiveList.addItem(
                                                 FunctionList.takeItem(
                                                 FunctionList.row(x))))
         ##below here add all possible tags##
         kuh = QtWidgets.QListWidgetItem('KUH')
         kuh.home_list = MaterialList
         MaterialList.addItem(kuh)
+        #####################################
         #set up ActiveList that shows which tags are active
-        ActiveList = QtWidgets.QListWidget(SMDialog)
-        ActiveList.setGeometry(QtCore.QRect(100, 350, 300, 100))
+        self.ActiveList = QtWidgets.QListWidget(SMDialog)
+        self.ActiveList.setGeometry(QtCore.QRect(100, 350, 300, 100))
         #on double click, access the homelist of the item and return it
-        ActiveList.itemDoubleClicked.connect(lambda x:
+        self.ActiveList.itemDoubleClicked.connect(lambda x:
                                                 x.home_list.addItem(
-                                                ActiveList.takeItem(
-                                                ActiveList.row(x))))
+                                                self.ActiveList.takeItem(
+                                                self.ActiveList.row(x))))
         #set it up so that it works as a menu button
         menu = menu_object
         CBPAction = menu.addAction('Create Building Plan')
@@ -187,7 +191,17 @@ class OctantView(QtWidgets.QListWidget):
         CBPButton = QtWidgets.QPushButton(SMDialog)
         CBPButton.setGeometry(QtCore.QRect(200, 450, 100, 50))
         CBPButton.setText('Create plan')
-        CBPButton.clicked.connect(item.make_building_plan)
+        #set up the stuff to send to the trigger_CBP_button
+        self.creator = creator
+        CBPButton.clicked.connect(self.trigger_CBP_button)
+
+    def trigger_CBP_button(self):
+        self.creator.plan_name = self.CBPNameBox
+        self.creator.plan_tags = []
+        for index in range(self.ActiveList.count()):
+            self.creator.plan_tags.append(self.ActiveList.item(index).text())
+        print(self.creator.plan_tags)
+        #self.creator.make_building_plan()
 
     def open_menu(self, position):
         #grab which class item is being requested by selection
@@ -207,7 +221,7 @@ class OctantView(QtWidgets.QListWidget):
         for method in item_methods:
             #check if it's a special-case method
             if method[0] == 'Create Building Plan':
-                self.CreateBuildingPlan(menu, item)
+                self.create_building_plan(menu, item)
                 continue
             method_text = method[0]
             method_function = method[1]

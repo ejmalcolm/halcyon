@@ -2,6 +2,7 @@ from creature import Automaton, Engineer
 from planet import Planet, Octant
 from task import ACTIVE_TASKS
 from player import Player, GM
+from vehicle import Halcyon
 import dill as pickle
 from random import sample
 
@@ -33,6 +34,7 @@ if __name__ == '__main__':
     Dune = Planet('Dune')
     Alpha = Automaton('Alpha', Dune, Dune.octants['North'], GM)
     Beta = Engineer('Beta', Dune, Dune.octants['North'], GM)
+    Starblaster = Halcyon('Starblaster', Dune, Dune.octants['North'], GM)
     ##write the pickle file
     print('Gamestate file written.')
     save_to_file()
