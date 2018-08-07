@@ -2,10 +2,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import pika
 import sys
-import datetime, time
+import time
 import dill as pickle
 
-from initialize_game import save_to_file
+from planet import Planet
+from player import Player
+from task import ACTIVE_TASKS
 
 def client_load_gamestate():
     global planets
@@ -298,16 +300,15 @@ class PlanetDialog(QtWidgets.QDialog):
         octant = planet.octants[octant_str]
         self.octant_view.view_octant(octant)
 
-class ActionThread(QtCore.QThread):
+class ActionLoop(QtCore.QThread):
 
     def run(self):
         while True:
-            if (datetime.datetime.utcnow().minute == 30
-            or datetime.datetime.utcnow().minute == 00):
-                print('Actions launched! Loading new gamestate...')
-                time.sleep(10)
-                client_load_gamestate()
-            time.sleep(30)
+            print(Planet.instances)
+            #save_to_file()
+            client_load_gamestate()
+            print('Updated.')
+            time.sleep(5)
 
 class ActionDock():
 
@@ -431,7 +432,7 @@ if __name__ == "__main__":
     client_load_gamestate()
     current_player = 'Gamemaster'
     #starts the ActionLoop
-    thread = ActionThread()
+    thread = ActionLoop()
     thread.start()
     #starts the main app
     Halcyon.show()
