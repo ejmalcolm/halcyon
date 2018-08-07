@@ -236,10 +236,13 @@ class OctantView(QtWidgets.QListWidget):
                 parameterMenu = menu.addMenu(method_text)
                 #to the secondary menu, add the parameters as actions
                 for parameter in method_parameters:
-                    parameterAction = parameterMenu.addAction(parameter)
-                    parameterAction.bound_function = method_function
-                    parameterAction.bound_parameter = parameter
-                    parameterAction.statechange = method_statechange
+                    try:
+                        parameterAction = parameterMenu.addAction(parameter)
+                        parameterAction.bound_function = method_function
+                        parameterAction.bound_parameter = parameter
+                        parameterAction.statechange = method_statechange
+                    except Exception as e:
+                        print(e)
             else:
                 baseAction = menu.addAction(method_text)
                 baseAction.bound_function = method_function

@@ -99,6 +99,7 @@ class Planet():
         #add self to instances for gamestate purposes
         self.__class__.instances.append(self)
         #rest of init
+        self.pos = len(Planet.instances)
         self.name = name
         octants = {}
         for direction in CARDINAL_DIRECTIONS:

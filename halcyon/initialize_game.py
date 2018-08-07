@@ -32,6 +32,7 @@ if __name__ == '__main__':
     # PlanetE = Planet(planet_names[4])
     ##debug stuff
     Dune = Planet('Dune')
+    Hoth = Planet('Hoth')
     Alpha = Automaton('Alpha', Dune, Dune.octants['North'], GM)
     Beta = Engineer('Beta', Dune, Dune.octants['North'], GM)
     Starblaster = Halcyon(Dune, Dune.octants['North'], GM)
