@@ -9,7 +9,6 @@ class Creature(Object):
         super().__init__(name, on_planet, in_octant, player)
         self.move = move
         #used as a way to check if the creature is currently doing a task
-        self.busy = False
         self.client_methods.append(('Move Octant', self.move_octant, self.planet.octants, True))
 
     def move_octant(self, target_octant_str):
@@ -102,6 +101,8 @@ class Engineer(CrewMember):
         return 'Engineer named %s' % self.name
 
     def make_building_plan(self):
+        if self.busy:
+            return '%s is already occupied' % self.name
         self.plan_name = ''
         self.plan_tags = []
         self.creating_plan = BuildingPlan(name, self.planet, self.octant, tags, self.player)

@@ -9,6 +9,7 @@ class Object():
         self.player = player
         self.planet = on_planet
         self.octant = in_octant
+        self.busy = False
         #add the object to the contents of the octant
         self.octant.add_occupant(self)
         #initialize the default, blank values for each tag category
@@ -20,13 +21,16 @@ class Object():
             self.client_methods.append(('Use Function', self.use_function, self.get_attributes()[2], True),)
 
     def use_function(self, function):
+        if self.busy:
+            return '%s is already occupied' % self.name
         #the amount of itme a function takes to execute
         #it's equal to the work the function tag takes to add
         time_hours = FUNCTION_TAGS[function]['Statistics']['Work']
         if time_hours != 0:
-            return Task(self, time_hours, self.use_function, self.player,
+            funcTask = Task(self, time_hours, self.use_function, self.player,
                     arguments=[function, 0],
                     result = 'Function of %s will be executed' % self)
+            return '%s used function %s' % (self, function)
         #splits the given function into a category of function and a specific event
         category = function.split('|')[0]
         specific = function.split('|')[1]
