@@ -9,7 +9,7 @@ from planet import Planet
 from player import Player
 from task import ACTIVE_TASKS
 
-def client_load_gamestate():
+def client_load_serverstate():
     global planets
     global tasks
     global players
@@ -22,6 +22,12 @@ def client_load_gamestate():
     ui.PlanetView.add_class_items(planets)
     ui.PlayerView.clear()
     ui.PlayerView.add_class_items(players)
+    ui.TaskView.clear()
+    ui.TaskView.add_class_items(tasks)
+
+def update_tasks():
+    #upades ui.Taskview with ACTIVE_TASKS
+    tasks = {str(task): task for task in ACTIVE_TASKS}
     ui.TaskView.clear()
     ui.TaskView.add_class_items(tasks)
 
@@ -271,7 +277,7 @@ class OctantView(QtWidgets.QListWidget):
         if check_octant_vision(name_object_dict):
             self.add_class_items(name_object_dict)
 
-class PlanetDialog(QtWidgets.QDialog):
+class PlanetOctantSelectDialog(QtWidgets.QDialog):
 
     def __init__(self, octant_view):
         super().__init__()
@@ -304,9 +310,7 @@ class ActionLoop(QtCore.QThread):
 
     def run(self):
         while True:
-            print(Planet.instances)
-            #save_to_file()
-            client_load_gamestate()
+            update_tasks()
             print('Updated.')
             time.sleep(5)
 
@@ -352,7 +356,7 @@ class Ui_Halcyon(object):
         self.PlayerView.setObjectName("PlayerView")
         ##define the octant selector that controls the octantview
         self.OctantSelect = QtWidgets.QPushButton(self.centralwidget)
-        self.OctantSelect.clicked.connect(PlanetDialog)
+        self.OctantSelect.clicked.connect(PlanetOctantSelectDialog)
         self.OctantSelect.setGeometry(QtCore.QRect(470, 0, 211, 31))
         self.OctantSelect.setStyleSheet("font: 15pt \"Sitka\";")
         self.OctantSelect.setObjectName("OctantSelect")
@@ -425,12 +429,12 @@ if __name__ == "__main__":
     ui = Ui_Halcyon()
     ui.setupUi(Halcyon)
     #start the login dialog
-    ##login = LoginDialog()
+    ###################################################login = LoginDialog()
     #if login credentials are correct
-    ##if login.exec_() == QtWidgets.QDialog.Accepted:
-    #loads gamestate from file and updates all views
-    client_load_gamestate()
+    ###################################################if login.exec_() == QtWidgets.QDialog.Accepted:
     current_player = 'Gamemaster'
+    #loads gamestate from file and updates all views
+    client_load_serverstate()
     #starts the ActionLoop
     thread = ActionLoop()
     thread.start()

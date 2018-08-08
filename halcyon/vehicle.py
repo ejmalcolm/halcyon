@@ -47,9 +47,8 @@ class Halcyon(SpaceShip):
         task_time = Task(
                         self, travel_time,
                         self.arrive_at_planet, self.player,
-                        arguments=[planet], 
-                        result= '%s has arrived at %s.' % (self, dest_planet_name))
-        print(travel_time)
+                        arguments=[planet],
+                        result= '%s will arrive at %s' % (self, dest_planet_name))
         return '%s is moving to %s' % (self, dest_planet_name)
 
     def arrive_at_planet(self, arrival_planet):
