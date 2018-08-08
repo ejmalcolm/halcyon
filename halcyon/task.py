@@ -35,6 +35,8 @@ class Task():
         #saves the arguments that will be needed as a list
         self.arguments = arguments
         self.result = result
+        #get client methods so it can be inspected
+        self.client_methods = [('Inspect', self.__str__, None, False),]
 
     def __str__(self):
         return '%s in %s' % (self.result, self.check_progress())

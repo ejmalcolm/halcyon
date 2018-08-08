@@ -31,5 +31,6 @@ bldng = building.Building('Automaton Cradle', Dune, Dune.octants['North'], ['Woo
 
 #print(bldng.get_all_tags())
 functions = bldng.get_attributes()[2]
-print(functions)
-print(bldng.use_function(functions[0]))
+print(Dune.octants['North'].contents)
+bldng.use_function('Spawn|Automaton')
+print(Dune.octants['North'].contents)

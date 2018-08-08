@@ -23,9 +23,10 @@ class Creature(Object):
         time_needed = (1/self.move)
         func_result = '%s moves to %s' % (self.name, target_octant)
         func_result = lambda _: self.octant.remove_occupant(self), target_octant.add_occupant(self)
-        move_task = Task(self, time_needed, func_result,
-                        self.player, result=func_result)
-        return '%s moves to %s' % (self.name, target_octant)
+        move_task = Task(self, time_needed,
+                        func_result, self.player,
+                        result='%s will arrive at %s' % (self, target_octant))
+        return '%s has arrived at %s' % (self.name, target_octant)
 
     def __str__(self):
         return 'Creature named %s' % self.name

@@ -26,7 +26,7 @@ def client_load_serverstate():
     ui.TaskView.add_class_items(tasks)
 
 def update_tasks():
-    #upades ui.Taskview with ACTIVE_TASKS
+    '''Updates ui.Taskview with the contents of ACTIVE_TASKS'''
     tasks = {str(task): task for task in ACTIVE_TASKS}
     ui.TaskView.clear()
     ui.TaskView.add_class_items(tasks)

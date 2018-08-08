@@ -22,7 +22,7 @@ class Halcyon(SpaceShip):
 
     def __init__(self, on_planet, in_octant, player):
         super().__init__("%s's Halcyon" % player, on_planet, in_octant, 100000, player)
-        add_tags(self, tags_list=['Iridium', 'Automaton Cradle'])
+        add_tags(self, tags_list=['Iridium', 'Spawn|Automaton'])
         self.planets_avail = Planet.instances
         self.names_of_planets = [planet.name for planet in Planet.instances]
         self.client_methods.append(('Move to Planet', self.move_to_planet, self.names_of_planets, True))

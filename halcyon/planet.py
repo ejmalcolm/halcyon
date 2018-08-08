@@ -113,7 +113,7 @@ class Planet():
         )
 
     def __str__(self):
-        return 'a planet named %s' % self.name
+        return 'planet %s' % self.name
 
     def get_octant_biome(self, octant_name):
         octant = self.octants[octant_name]

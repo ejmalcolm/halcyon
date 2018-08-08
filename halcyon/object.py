@@ -1,5 +1,6 @@
 from importlib import import_module
 from tags import add_tags, MATERIAL_TAGS, STRUCTURE_TAGS, FUNCTION_TAGS
+from task import Task
 
 class Object():
 
@@ -19,11 +20,18 @@ class Object():
             self.client_methods.append(('Use Function', self.use_function, self.get_attributes()[2], True),)
 
     def use_function(self, function):
+        #the amount of itme a function takes to execute
+        #it's equal to the work the function tag takes to add
+        time_hours = FUNCTION_TAGS[function]['Statistics']['Work']
+        if time_hours != 0:
+            return Task(self, time_hours, self.use_function, self.player,
+                    arguments=[function, 0],
+                    result = 'Function of %s will be executed' % self)
         #splits the given function into a category of function and a specific event
         category = function.split('|')[0]
         specific = function.split('|')[1]
         #if the category is spawn, create an instance of the specific class
-        #the initalizations of the class handles all of the rest
+        #the initilizations of the class handles all of the rest
         if category == 'Spawn':
             #name = input('Enter name of creature')
             Needed_Class = getattr(import_module('creature'), specific)
