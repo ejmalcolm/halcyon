@@ -26,3 +26,6 @@ Hoth = planet.Planet('Hoth')
 #labor = creature.Laborer('bob', Dune, Dune.octants['North'], build_rate=5, player=player.GM)
 #
 # bplan = building.BuildingPlan('buh', Dune, Dune.octants['North'], ['Wood', 'Metal'], player.GM)
+
+a = 'yes'
+print(a.__str__())

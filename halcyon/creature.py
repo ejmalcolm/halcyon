@@ -45,10 +45,7 @@ class Laborer(Creature):
         return 'Laborer named %s' % self.name
 
     def check_for_plans(self):
-        plans_as_str = []
-        for plan in self.octant.class_objects_in('BuildingPlan'):
-            plans_as_str.append(plan.__str__())
-        return plans_as_str
+        return self.octant.class_objects_in('BuildingPlan')
 
     def harvest_resource(self, resource):
         '''starts a Task() of harvesting the given resource if the resource is in the same octant'''
@@ -69,7 +66,7 @@ class Laborer(Creature):
             return '%s harvests %s' % (self.name, resource)
         return 'there is no %s in %s' % (resource, self.octant)
 
-    def construct_building(self, building_plan_text):
+    def construct_building(self, building_plan):
         '''starts a task of building the given plan if the plan is in the same octant'''
         if self.busy:
             return '%s is already occupied' % self.name
