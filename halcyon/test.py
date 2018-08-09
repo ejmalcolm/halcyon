@@ -17,20 +17,12 @@ Hoth = planet.Planet('Hoth')
 
 ##dont delete above this plzty
 
-bldng = building.Building('Automaton Cradle', Dune, Dune.octants['North'], ['Wood', 'Automaton Cradle'], player.GM)
+#bldng = building.BuildingPlan('Cradle', Dune, Dune.octants['North'], ['Wood', 'Spawn|Automaton'], player.GM)
 #
 # spcshp = vehicle.SpaceShip('Halcyon', Dune, Dune.octants['North'], 100000)
 #
 # crtr = creature.Creature('a', Dune, Dune.octants['North'], 0, 1)
 #
-# labor = creature.Laborer('bob', Dune, Dune.octants['North'], build_rate=5, player=player.GM)
+#labor = creature.Laborer('bob', Dune, Dune.octants['North'], build_rate=5, player=player.GM)
 #
 # bplan = building.BuildingPlan('buh', Dune, Dune.octants['North'], ['Wood', 'Metal'], player.GM)
-#with open('gamestate.pickle', 'wb') as handle:
-#    pickle.dump(planet.Planet.instances, handle)
-
-#print(bldng.get_all_tags())
-functions = bldng.get_attributes()[2]
-print(Dune.octants['North'].contents)
-bldng.use_function('Spawn|Automaton')
-print(Dune.octants['North'].contents)

@@ -13,7 +13,7 @@ class BuildingPlan(Object):
         self.resource_needed = self.tags['Material']
 
     def __str__(self):
-        return 'building plan for a %s' % self.name
+        return '"%s" -- Building Plan' % self.name
 
     def work_on(self, amount):
         self.work_needed -= amount

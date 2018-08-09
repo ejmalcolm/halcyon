@@ -39,10 +39,16 @@ class Laborer(Creature):
         self.client_methods.append(('Harvest Resource', self.harvest_resource,
                                     self.octant.resources, True))
         self.client_methods.append(('Construct Building', self.construct_building,
-                                    self.octant.class_objects_in('BuildingPlan'), True))
+                                    self.check_for_plans, True))
 
     def __str__(self):
         return 'Laborer named %s' % self.name
+
+    def check_for_plans(self):
+        plans_as_str = []
+        for plan in self.octant.class_objects_in('BuildingPlan'):
+            plans_as_str.append(plan.__str__())
+        return plans_as_str
 
     def harvest_resource(self, resource):
         '''starts a Task() of harvesting the given resource if the resource is in the same octant'''
@@ -63,7 +69,7 @@ class Laborer(Creature):
             return '%s harvests %s' % (self.name, resource)
         return 'there is no %s in %s' % (resource, self.octant)
 
-    def construct_building(self, building_plan):
+    def construct_building(self, building_plan_text):
         '''starts a task of building the given plan if the plan is in the same octant'''
         if self.busy:
             return '%s is already occupied' % self.name
@@ -100,11 +106,9 @@ class Engineer(CrewMember):
     def __str__(self):
         return 'Engineer named %s' % self.name
 
-    def make_building_plan(self):
+    def make_building_plan(self, name, tags):
         if self.busy:
             return '%s is already occupied' % self.name
-        self.plan_name = ''
-        self.plan_tags = []
         self.creating_plan = BuildingPlan(name, self.planet, self.octant, tags, self.player)
 
 class Soldier(CrewMember):

@@ -111,7 +111,12 @@ class DetailView(QtWidgets.QListWidget):
         for method in item_methods:
             method_text = method[0]
             method_function = method[1]
-            method_parameters = method[2]
+            #first see if its the parameter is a function, if not, just set it straight
+            try:
+                method_parameters = method[2]()
+            except Exception as e:
+                method_parameters = method[2]
+            #statechange governs whether the method has to be sent to the server
             method_statechange = method[3]
             if method_parameters:
                 #add a an additional menu to the main menu
@@ -204,12 +209,11 @@ class OctantView(QtWidgets.QListWidget):
         CBPButton.clicked.connect(self.trigger_CBP_button)
 
     def trigger_CBP_button(self):
-        self.creator.plan_name = self.CBPNameBox
-        self.creator.plan_tags = []
+        plan_name = self.CBPNameBox.text()
+        plan_tags = []
         for index in range(self.ActiveList.count()):
-            self.creator.plan_tags.append(self.ActiveList.item(index).text())
-        print(self.creator.plan_tags)
-        #self.creator.make_building_plan()
+            plan_tags.append(self.ActiveList.item(index).text())
+        self.creator.make_building_plan(plan_name, plan_tags)
 
     def open_menu(self, position):
         #grab which class item is being requested by selection
@@ -232,10 +236,13 @@ class OctantView(QtWidgets.QListWidget):
             try:
                 method_text = method[0]
                 method_function = method[1]
-                method_parameters = method[2]
+                #first see if its the parameter is a function, if not, just set it straight
+                try:
+                    method_parameters = method[2]()
+                except Exception as e:
+                    method_parameters = method[2]
                 method_statechange = method[3]
             except Exception as e:
-                print('Special method detected %s' % method_text)
                 if method_text == 'Create Building Plan':
                     self.create_building_plan(menu, item)
                 continue
@@ -311,7 +318,6 @@ class ActionLoop(QtCore.QThread):
     def run(self):
         while True:
             update_tasks()
-            print('Updated.')
             time.sleep(5)
 
 class ActionDock():
