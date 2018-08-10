@@ -45,7 +45,8 @@ class Task():
         #if the end time has passed, call end_func())
         if self.end_time <= time():
             self.end_func(*self.arguments)
-            self.busy = False
+            self.task_creator.busy = False
+            ACTIVE_TASKS.remove(self)
             return '%s was finished.' % self.result
         #otherwise, report the hours/minutes left until its done
         seconds_left = self.end_time - time()

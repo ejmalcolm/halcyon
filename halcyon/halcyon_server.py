@@ -1,6 +1,9 @@
 import pika
 import dill as pickle
-from initialize_game import save_to_file
+from planet import Planet
+from task import ACTIVE_TASKS
+from player import Player
+from task import Task
 
 def load_gamestate():
     global planets
@@ -11,12 +14,19 @@ def load_gamestate():
     planets = superlist[0]
     tasks = superlist[1]
     players = superlist[2]
-    for class_dict in superlist:
-        obj_list = [class_dict[key] for key in class_dict]
-        for class_obj in obj_list:
-            class_obj.instances.append(class_obj)
+
+def save_to_file():
+    planets = {planet.name: planet for planet in Planet.instances}
+    tasks = {str(task): task for task in ACTIVE_TASKS}
+    players = {str(player): player for player in Player.instances}
+    print(ACTIVE_TASKS)
+    superlist = [planets, tasks, players]
+    with open('gamestate.pickle', 'wb') as handle:
+        pickle.dump(superlist, handle)
 
 def process_action(serialized_action):
+    print(serialized_action)
+    load_gamestate()
     #call the serialized action
     action = pickle.loads(serialized_action)
     action_text = action[0]
@@ -24,24 +34,16 @@ def process_action(serialized_action):
     action_parameter = action[2]
     print(action_text)
     if action_parameter:
+        print(action_func)
         action_func(action_parameter)
     else:
         action_func()
     #update the saved gamestate
-    load_gamestate()
     save_to_file()
-
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
-channel = connection.channel()
-channel.queue_declare(queue='action')
 
 def callback(ch, method, properties, body):
     #call process_action_dock on the body, which is the serialized ActionDock
     process_action(body)
-
-channel.basic_consume(callback,
-                      queue='action',
-                      no_ack=True)
 
 def start_server():
     print(' [*] Waiting for messages. To exit press CTRL+C')
@@ -52,4 +54,10 @@ def start_server():
         start_server()
 
 if __name__ == '__main__':
-    start_server()
+    # connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+    # channel = connection.channel()
+    # channel.queue_declare(queue='action')
+    # channel.basic_consume(callback, queue='action', no_ack=True)
+    # start_server()
+    save_to_file()
+    pass

@@ -28,6 +28,7 @@ def client_load_serverstate():
 def update_tasks():
     '''Updates ui.Taskview with the contents of ACTIVE_TASKS'''
     tasks = {str(task): task for task in ACTIVE_TASKS}
+    print(ACTIVE_TASKS)
     ui.TaskView.clear()
     ui.TaskView.add_class_items(tasks)
 
@@ -326,6 +327,7 @@ class ActionDock():
         self.dock = []
 
     def launch_action(self, action_ship):
+        print(action_ship)
         #need to launch the action to the rabbitmq queue
         #first serializes the action with dill
         #then sends the serialized text to the queue
