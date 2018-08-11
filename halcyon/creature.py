@@ -25,7 +25,7 @@ class Creature(Object):
         move_task = Task(self, time_needed,
                         func_result, self.player,
                         result='%s will arrive at %s' % (self, target_octant))
-        return '%s has arrived at %s' % (self.name, target_octant)
+        return '%s will arrive at %s' % (self.name, target_octant)
 
     def __str__(self):
         return 'Creature named %s' % self.name

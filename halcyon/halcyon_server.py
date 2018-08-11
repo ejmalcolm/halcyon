@@ -16,26 +16,22 @@ def load_gamestate():
     players = superlist[2]
 
 def save_to_file():
-    planets = {planet.name: planet for planet in Planet.instances}
     tasks = {str(task): task for task in ACTIVE_TASKS}
-    players = {str(player): player for player in Player.instances}
-    print(ACTIVE_TASKS)
     superlist = [planets, tasks, players]
+    print([ACTIVE_TASKS[0].task_creator])
+    print(planets['Dune'].octants['North'].contents)
     with open('gamestate.pickle', 'wb') as handle:
         pickle.dump(superlist, handle)
 
 def process_action(serialized_action):
-    print(serialized_action)
     load_gamestate()
     #call the serialized action
     action = pickle.loads(serialized_action)
     action_text = action[0]
     action_func = action[1]
     action_parameter = action[2]
-    print(action_text)
     if action_parameter:
-        print(action_func)
-        action_func(action_parameter)
+        print(action_func(action_parameter))
     else:
         action_func()
     #update the saved gamestate
@@ -54,10 +50,9 @@ def start_server():
         start_server()
 
 if __name__ == '__main__':
-    # connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
-    # channel = connection.channel()
-    # channel.queue_declare(queue='action')
-    # channel.basic_consume(callback, queue='action', no_ack=True)
-    # start_server()
-    save_to_file()
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+    channel = connection.channel()
+    channel.queue_declare(queue='action')
+    channel.basic_consume(callback, queue='action', no_ack=True)
+    start_server()
     pass
